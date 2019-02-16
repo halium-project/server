@@ -50,6 +50,9 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 
 	controller := NewController(uuidProducer, passwordProducer, storage)
 
+	// Create the first "admin" user with full permission.
+	//
+	// WARNING: The password need to be changed after the first connection.
 	if requireBootstrap {
 		_, err := controller.Create(ctx, &CreateCmd{
 			Username: bootstrapUsername,

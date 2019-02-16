@@ -29,16 +29,16 @@ type StorageInterface interface {
 }
 
 func InitController(ctx context.Context, server *yaccc.Server) *Controller {
+	var requireBootstrap bool
+
 	database, err := server.ConnectDatabase(ctx, BucketName)
 	if err != nil {
-		// SetupStorage will also create the default client.
-		//
-		// This is done on the storage lvl in order to force the id
-		// ("00000000-0000-4200-b000-000000000000")
 		database, err = SetupStorage(ctx, server)
 		if err != nil {
 			log.Fatal(errors.Wrapf(err, "failed to setup %q storage", BucketName))
 		}
+
+		requireBootstrap = true
 	}
 
 	storage := NewStorage(db.NewCouchdbDriver(database))
@@ -46,7 +46,26 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 	uuidProducer := uuid.NewGoUUID()
 	passwordProducer := password.NewPasswordHasher()
 
-	return NewController(uuidProducer, passwordProducer, storage)
+	controller := NewController(uuidProducer, passwordProducer, storage)
+
+	// Give access to the "dashboard" app.
+	//
+	// This is required in order to configure your server.
+	if requireBootstrap {
+		_, _, err := controller.Create(ctx, &CreateCmd{
+			Name:          "Dashboard",
+			RedirectURIs:  []string{"http://localhost:8080"},
+			GrantTypes:    []string{"implicit", "refresh_token"},
+			ResponseTypes: []string{"token", "code"},
+			Scopes:        []string{"users", "clients.read"},
+			Public:        true,
+		})
+		if err != nil {
+			log.Fatal(errors.Wrap(err, "failed to create the dashboard app permission"))
+		}
+	}
+
+	return controller
 }
 
 func NewController(
