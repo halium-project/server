@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// nolint
+// Hardcoded secret used only for tests
 const validSecret = "2558539b-e119-408d-a31b-a1d6cf1b60aa"
 
 func Test_Client_Controller_Create(t *testing.T) {
