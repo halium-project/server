@@ -1,11 +1,13 @@
+# Ensure we are in a container-based ci environment (faster boot time)
+sudo: false
+
 language: go
 
 env:
-  - TZ=Europe/Paris
-
-# This is a weird way of telling Travis to use the fast container-based test
-# runner instead of the slow VM-based runner.
-sudo: false
+  global:
+    # Enable the "go mod" feature
+    - GO111MODULE: "on"
+    - TZ: Europe/Paris
 
 # Don't email me the results of the test runs.
 notifications:
@@ -20,12 +22,9 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 go:
-  - 1.10.x
   - 1.11.x
 
 install:
-  - go get -u github.com/golang/dep/cmd/dep
-  - dep ensure -vendor-only
 
 script:
   - go test -v -race -timeout=1m ./...
