@@ -66,10 +66,6 @@ func Test_Client_StorageMock_GetAll(t *testing.T) {
 	dbDriver.On("ExecuteViewQuery", &db.Query{
 		IndexName: "by_name",
 		Limit:     200,
-		Range: &db.Range{
-			Start: []string{},
-			End:   nil,
-		},
 	}).Return([]db.ViewRow{
 		{ID: "some-id"},
 		{ID: "some-id-2"},
@@ -100,10 +96,6 @@ func Test_Client_StorageMock_GetAll_empty(t *testing.T) {
 	dbDriver.On("ExecuteViewQuery", &db.Query{
 		IndexName: "by_name",
 		Limit:     200,
-		Range: &db.Range{
-			Start: []string{},
-			End:   nil,
-		},
 	}).Return([]db.ViewRow{}, nil).Once()
 
 	res, err := service.GetAll(context.Background())
@@ -123,10 +115,6 @@ func Test_Client_StorageMock_GetAll_with_view_error(t *testing.T) {
 	dbDriver.On("ExecuteViewQuery", &db.Query{
 		IndexName: "by_name",
 		Limit:     200,
-		Range: &db.Range{
-			Start: []string{},
-			End:   nil,
-		},
 	}).Return(nil, fmt.Errorf("some-error")).Once()
 
 	res, err := service.GetAll(context.Background())
@@ -153,10 +141,6 @@ func Test_Client_StorageMock_GetAll_with_GetMany_error(t *testing.T) {
 	dbDriver.On("ExecuteViewQuery", &db.Query{
 		IndexName: "by_name",
 		Limit:     200,
-		Range: &db.Range{
-			Start: []string{},
-			End:   nil,
-		},
 	}).Return([]db.ViewRow{
 		{ID: "some-id"},
 		{ID: "some-id-2"},

@@ -73,10 +73,6 @@ func (t *Storage) GetAll(ctx context.Context) (map[string]Client, error) {
 	viewResult, err := t.driver.ExecuteViewQuery(ctx, &db.Query{
 		IndexName: "by_name",
 		Limit:     200,
-		Range: &db.Range{
-			Start: []string{},
-			End:   nil,
-		},
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to query the view")
