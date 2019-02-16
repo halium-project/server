@@ -62,7 +62,7 @@ func main() {
 
 	// Expose the Client resource.
 	clientHTTPHandler := client.NewHTTPHandler(clientController)
-	router.HandleFunc("/clients", clientHTTPHandler.Create).Methods("POST")
+	router.HandleFunc("/clients", perm.Check("clients.write", clientHTTPHandler.Create)).Methods("POST")
 	router.HandleFunc("/clients", perm.Check("clients.read", clientHTTPHandler.GetAll)).Methods("GET")
 	router.HandleFunc("/clients/{clientID}", perm.Check("clients.read", clientHTTPHandler.Get)).Methods("GET")
 
