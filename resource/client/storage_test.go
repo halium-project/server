@@ -6,14 +6,11 @@ import (
 	"testing"
 
 	"github.com/halium-project/server/db"
-	"github.com/halium-project/server/util"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_Client_Storage_Set(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	storage := NewStorage(dbDriver)
 
@@ -27,8 +24,6 @@ func Test_Client_Storage_Set(t *testing.T) {
 }
 
 func Test_Client_Storage_Set_with_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	storage := NewStorage(dbDriver)
 
@@ -49,8 +44,6 @@ func Test_Client_Storage_Set_with_driver_error(t *testing.T) {
 }
 
 func Test_Client_Storage_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	storage := NewStorage(dbDriver)
 
@@ -66,8 +59,6 @@ func Test_Client_Storage_Get(t *testing.T) {
 }
 
 func Test_Client_Storage_Get_not_found(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 
 	dbDriver.On("Get", "some-id").Return("", nil, nil).Once()
@@ -84,8 +75,6 @@ func Test_Client_Storage_Get_not_found(t *testing.T) {
 }
 
 func Test_Client_Storage_Get_with_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	storage := NewStorage(dbDriver)
 
@@ -108,8 +97,6 @@ func Test_Client_Storage_Get_with_driver_error(t *testing.T) {
 }
 
 func Test_Client_Storage_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -138,8 +125,6 @@ func Test_Client_Storage_GetAll(t *testing.T) {
 }
 
 func Test_Client_Storage_GetAll_empty(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -157,8 +142,6 @@ func Test_Client_Storage_GetAll_empty(t *testing.T) {
 }
 
 func Test_Client_Storage_GetAll_with_view_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -183,8 +166,6 @@ func Test_Client_Storage_GetAll_with_view_error(t *testing.T) {
 }
 
 func Test_Client_Storage_GetAll_with_GetMany_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -214,8 +195,6 @@ func Test_Client_Storage_GetAll_with_GetMany_error(t *testing.T) {
 }
 
 func Test_User_Storage_FindOneByName(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	user := NewStorage(dbDriver)
 
@@ -240,8 +219,6 @@ func Test_User_Storage_FindOneByName(t *testing.T) {
 }
 
 func Test_User_Storage_FindOneByName_with_no_user_found(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	user := NewStorage(dbDriver)
 
@@ -262,8 +239,6 @@ func Test_User_Storage_FindOneByName_with_no_user_found(t *testing.T) {
 }
 
 func Test_User_Storage_FindOneByName_with_query_view_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	user := NewStorage(dbDriver)
 
@@ -291,8 +266,6 @@ func Test_User_Storage_FindOneByName_with_query_view_error(t *testing.T) {
 }
 
 func Test_User_Storage_FindOneByName_with_get_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	user := NewStorage(dbDriver)
 

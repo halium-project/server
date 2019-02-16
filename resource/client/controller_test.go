@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/halium-project/server/util/password"
 	"github.com/halium-project/server/util/uuid"
 	"github.com/pkg/errors"
@@ -300,8 +299,6 @@ func Test_Client_Controller_Get_with_resource_notFound(t *testing.T) {
 }
 
 func Test_Client_Controller_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -327,8 +324,6 @@ func Test_Client_Controller_GetAll(t *testing.T) {
 }
 
 func Test_Client_Controller_GetAll_with_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)

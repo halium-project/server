@@ -5,13 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_User_ControllerMock_Create(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Create", &CreateCmd{
@@ -31,8 +28,6 @@ func Test_User_ControllerMock_Create(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Create_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Create", &CreateCmd{
@@ -52,8 +47,6 @@ func Test_User_ControllerMock_Create_with_error(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Get", &GetCmd{
@@ -71,8 +64,6 @@ func Test_User_ControllerMock_Get(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Get_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Get", &GetCmd{
@@ -90,8 +81,6 @@ func Test_User_ControllerMock_Get_with_error(t *testing.T) {
 }
 
 func Test_User_ControllerMock_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("GetAll", &GetAllCmd{}).Return(map[string]User{
@@ -109,8 +98,6 @@ func Test_User_ControllerMock_GetAll(t *testing.T) {
 }
 
 func Test_User_ControllerMock_GetAll_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("GetAll", &GetAllCmd{}).Return(nil, fmt.Errorf("some-error")).Once()
@@ -124,8 +111,6 @@ func Test_User_ControllerMock_GetAll_with_error(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Validate(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Validate", &ValidateCmd{
@@ -146,8 +131,6 @@ func Test_User_ControllerMock_Validate(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Validate_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Validate", &ValidateCmd{
@@ -168,8 +151,6 @@ func Test_User_ControllerMock_Validate_with_error(t *testing.T) {
 }
 
 func Test_User_ControllerMock_GetTotalUserCount(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("GetTotalUserCount").Return(42, nil).Once()
@@ -183,8 +164,6 @@ func Test_User_ControllerMock_GetTotalUserCount(t *testing.T) {
 }
 
 func Test_User_ControllerMock_Update(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	cmd := UpdateCmd{

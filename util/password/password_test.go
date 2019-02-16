@@ -3,13 +3,10 @@ package password
 import (
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_PasswordHasher(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, err := hasher.Hash("some-big-password")
@@ -22,8 +19,6 @@ func Test_PasswordHasher(t *testing.T) {
 }
 
 func Test_PasswordHasher_with_salt(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, salt, err := hasher.HashWithSalt("some-big-password")
@@ -37,8 +32,6 @@ func Test_PasswordHasher_with_salt(t *testing.T) {
 }
 
 func Test_PasswordHasher_HashWithSalt_len_salt(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	_, salt, err := hasher.HashWithSalt("some-big-password")
@@ -48,8 +41,6 @@ func Test_PasswordHasher_HashWithSalt_len_salt(t *testing.T) {
 }
 
 func Test_PasswordHasher_Hash_empty_password(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, err := hasher.Hash("")
@@ -58,8 +49,6 @@ func Test_PasswordHasher_Hash_empty_password(t *testing.T) {
 }
 
 func Test_PasswordHasher_HashWithSalt_empty_password(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, salt, err := hasher.HashWithSalt("")
@@ -69,8 +58,6 @@ func Test_PasswordHasher_HashWithSalt_empty_password(t *testing.T) {
 }
 
 func Test_PasswordHasher_Validate_bad_hash_encoding(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	identical, err := hasher.Validate("some-big-password", "no-hexa-code")
@@ -79,8 +66,6 @@ func Test_PasswordHasher_Validate_bad_hash_encoding(t *testing.T) {
 }
 
 func Test_PasswordHasher_ValidateWithSalt_bad_hash_encoding(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	identical, err := hasher.ValidateWithSalt("some-big-password", "some-salt", "no-hexa-code")
@@ -89,8 +74,6 @@ func Test_PasswordHasher_ValidateWithSalt_bad_hash_encoding(t *testing.T) {
 }
 
 func Test_PasswordHasher_Validate_not_invalid(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, err := hasher.Hash("some-big-password")
@@ -103,8 +86,6 @@ func Test_PasswordHasher_Validate_not_invalid(t *testing.T) {
 }
 
 func Test_PasswordHasher_ValidateWithSalt_not_invalid(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	hasher := NewPasswordHasher()
 
 	hash, salt, err := hasher.HashWithSalt("some-big-password")

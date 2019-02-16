@@ -4,14 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_AccessToken_StorageMock_Set(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Set", "some-id", "some-rev", &ValidAccessToken).Return("some-rev-2", nil)
@@ -25,8 +22,6 @@ func Test_AccessToken_StorageMock_Set(t *testing.T) {
 }
 
 func Test_AccessToken_StorageMock_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("some-rev", &ValidAccessToken, nil)
@@ -40,8 +35,6 @@ func Test_AccessToken_StorageMock_Get(t *testing.T) {
 }
 
 func Test_AccessToken_StorageMock_Get_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("", nil, errors.New("some-error"))
@@ -55,8 +48,6 @@ func Test_AccessToken_StorageMock_Get_with_error(t *testing.T) {
 }
 
 func Test_AccessToken_StorageMock_Delete(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Delete", "some-id", "some-rev").Return(errors.New("some-error"))
@@ -68,8 +59,6 @@ func Test_AccessToken_StorageMock_Delete(t *testing.T) {
 }
 
 func Test_AccessToken_StorageMock_FindOneByRefreshToken(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("FindOneByRefreshToken", "some-name").Return("some-id", "some-rev", &ValidAccessToken, nil)
@@ -85,8 +74,6 @@ func Test_AccessToken_StorageMock_FindOneByRefreshToken(t *testing.T) {
 }
 
 func Test_AccessToken_StorageMock_FindOneByRefreshToken_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("FindOneByRefreshToken", "some-name").Return("", "", nil, errors.New("some-error"))

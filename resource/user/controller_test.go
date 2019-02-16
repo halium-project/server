@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/halium-project/server/util/password"
 	"github.com/halium-project/server/util/uuid"
 	"github.com/pkg/errors"
@@ -15,8 +14,6 @@ import (
 const newUsername = "some@new.email"
 
 func Test_User_Controller_Create(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -42,8 +39,6 @@ func Test_User_Controller_Create(t *testing.T) {
 }
 
 func Test_User_Controller_Create_with_validation_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -69,8 +64,6 @@ func Test_User_Controller_Create_with_validation_error(t *testing.T) {
 }
 
 func Test_User_Controller_Create_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -104,8 +97,6 @@ func Test_User_Controller_Create_storage_error(t *testing.T) {
 }
 
 func Test_User_Controller_Create_password_hash_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -138,8 +129,6 @@ func Test_User_Controller_Create_password_hash_error(t *testing.T) {
 }
 
 func Test_User_Controller_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -160,8 +149,6 @@ func Test_User_Controller_Get(t *testing.T) {
 }
 
 func Test_User_Controller_Get_with_validationError(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -185,8 +172,6 @@ func Test_User_Controller_Get_with_validationError(t *testing.T) {
 }
 
 func Test_User_Controller_Get_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -214,8 +199,6 @@ func Test_User_Controller_Get_driver_error(t *testing.T) {
 }
 
 func Test_User_Controller_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -241,8 +224,6 @@ func Test_User_Controller_GetAll(t *testing.T) {
 }
 
 func Test_User_Controller_GetAll_with_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -268,8 +249,6 @@ func Test_User_Controller_GetAll_with_storage_error(t *testing.T) {
 }
 
 func Test_User_Controller_Validate(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -294,8 +273,6 @@ func Test_User_Controller_Validate(t *testing.T) {
 }
 
 func Test_User_Controller_Validate_with_credentials_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -324,8 +301,6 @@ func Test_User_Controller_Validate_with_credentials_storage_error(t *testing.T) 
 }
 
 func Test_User_Controller_Validate_with_unknown_email(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -348,8 +323,6 @@ func Test_User_Controller_Validate_with_unknown_email(t *testing.T) {
 }
 
 func Test_User_Controller_Validate_with_password_validationError(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -380,8 +353,6 @@ func Test_User_Controller_Validate_with_password_validationError(t *testing.T) {
 }
 
 func Test_User_Controller_Validate_with_invalid_password(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -406,8 +377,6 @@ func Test_User_Controller_Validate_with_invalid_password(t *testing.T) {
 }
 
 func Test_User_Controller_GetTotalUserCount(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -426,8 +395,6 @@ func Test_User_Controller_GetTotalUserCount(t *testing.T) {
 }
 
 func Test_User_Controller_GetTotalUserCount_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
@@ -453,8 +420,6 @@ func Test_User_Controller_GetTotalUserCount_with_error(t *testing.T) {
 }
 
 func Test_User_Controller_Create_with_email_checking_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -484,8 +449,6 @@ func Test_User_Controller_Create_with_email_checking_error(t *testing.T) {
 }
 
 func Test_User_Controller_Create_with_email_already_taken(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -513,8 +476,6 @@ func Test_User_Controller_Create_with_email_already_taken(t *testing.T) {
 }
 
 func Test_User_Controller_Update_with_validation_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -539,8 +500,6 @@ func Test_User_Controller_Update_with_validation_error(t *testing.T) {
 }
 
 func Test_User_Controller_Update_with_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -569,8 +528,6 @@ func Test_User_Controller_Update_with_storage_error(t *testing.T) {
 }
 
 func Test_User_Controller_Update_with_email_validation_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -600,8 +557,6 @@ func Test_User_Controller_Update_with_email_validation_error(t *testing.T) {
 }
 
 func Test_User_Controller_Update_with_user_not_found(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -625,8 +580,6 @@ func Test_User_Controller_Update_with_user_not_found(t *testing.T) {
 }
 
 func Test_User_Controller_Update(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -653,8 +606,6 @@ func Test_User_Controller_Update(t *testing.T) {
 }
 
 func Test_User_Controller_Update_with_set_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)

@@ -4,14 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_AuthorizationCode_StorageMock_Set(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Set", "some-id", "some-rev", &ValidAuthorizationCode).Return("some-rev-2", nil)
@@ -25,8 +22,6 @@ func Test_AuthorizationCode_StorageMock_Set(t *testing.T) {
 }
 
 func Test_AuthorizationCode_StorageMock_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("some-rev", &ValidAuthorizationCode, nil)
@@ -40,8 +35,6 @@ func Test_AuthorizationCode_StorageMock_Get(t *testing.T) {
 }
 
 func Test_AuthorizationCode_StorageMock_Get_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("", nil, errors.New("some-error"))
@@ -55,8 +48,6 @@ func Test_AuthorizationCode_StorageMock_Get_with_error(t *testing.T) {
 }
 
 func Test_AuthorizationCode_StorageMock_Delete(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Delete", "some-id", "some-rev").Return(errors.New("some-error"))

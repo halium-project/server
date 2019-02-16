@@ -6,14 +6,11 @@ import (
 	"testing"
 
 	"github.com/halium-project/server/db"
-	"github.com/halium-project/server/util"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_AccessToken_Storage_Set(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -28,8 +25,6 @@ func Test_AccessToken_Storage_Set(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Set_with_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -51,8 +46,6 @@ func Test_AccessToken_Storage_Set_with_driver_error(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -68,8 +61,6 @@ func Test_AccessToken_Storage_Get(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Get_not_found(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -85,8 +76,6 @@ func Test_AccessToken_Storage_Get_not_found(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Get_with_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -109,8 +98,6 @@ func Test_AccessToken_Storage_Get_with_driver_error(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Delete(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -124,8 +111,6 @@ func Test_AccessToken_Storage_Delete(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_Delete_with_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -146,8 +131,6 @@ func Test_AccessToken_Storage_Delete_with_driver_error(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_FindOneByRefreshToken(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -172,8 +155,6 @@ func Test_AccessToken_Storage_FindOneByRefreshToken(t *testing.T) {
 }
 
 func Test_AccessToken_Storage_FindOneByRefreshToken_with_no_accessToken_found(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -194,8 +175,6 @@ func Test_AccessToken_Storage_FindOneByRefreshToken_with_no_accessToken_found(t 
 }
 
 func Test_AccessToken_Storage_FindOneByRefreshToken_with_query_view_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 
@@ -223,8 +202,6 @@ func Test_AccessToken_Storage_FindOneByRefreshToken_with_query_view_error(t *tes
 }
 
 func Test_AccessToken_Storage_FindOneByRefreshToken_with_get_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	accessToken := NewStorage(dbDriver)
 

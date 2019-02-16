@@ -5,13 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_Client_ControllerMock_Create(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Create", &CreateCmd{
@@ -38,8 +35,6 @@ func Test_Client_ControllerMock_Create(t *testing.T) {
 }
 
 func Test_Client_ControllerMock_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Get", &GetCmd{
@@ -57,8 +52,6 @@ func Test_Client_ControllerMock_Get(t *testing.T) {
 }
 
 func Test_Client_ControllerMock_Get_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("Get", &GetCmd{
@@ -76,8 +69,6 @@ func Test_Client_ControllerMock_Get_with_error(t *testing.T) {
 }
 
 func Test_Client_ControllerMock_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("GetAll", &GetAllCmd{}).Return(map[string]Client{
@@ -95,8 +86,6 @@ func Test_Client_ControllerMock_GetAll(t *testing.T) {
 }
 
 func Test_Client_ControllerMock_GetAll_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(ControllerMock)
 
 	mock.On("GetAll", &GetAllCmd{}).Return(nil, fmt.Errorf("some-error")).Once()

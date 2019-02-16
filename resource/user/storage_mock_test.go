@@ -6,14 +6,11 @@ import (
 	"testing"
 
 	"github.com/halium-project/server/db"
-	"github.com/halium-project/server/util"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_User_StorageMock_Set(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Set", "some-id", "some-rev", &ValidUser).Return("some-rev-2", nil)
@@ -27,8 +24,6 @@ func Test_User_StorageMock_Set(t *testing.T) {
 }
 
 func Test_User_StorageMock_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("some-rev", &ValidUser, nil)
@@ -42,8 +37,6 @@ func Test_User_StorageMock_Get(t *testing.T) {
 }
 
 func Test_User_StorageMock_Get_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("Get", "some-id").Return("", nil, errors.New("some-error"))
@@ -57,8 +50,6 @@ func Test_User_StorageMock_Get_with_error(t *testing.T) {
 }
 
 func Test_User_StorageMock_GetAll(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -87,8 +78,6 @@ func Test_User_StorageMock_GetAll(t *testing.T) {
 }
 
 func Test_User_StorageMock_GetAll_empty(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -106,8 +95,6 @@ func Test_User_StorageMock_GetAll_empty(t *testing.T) {
 }
 
 func Test_User_StorageMock_GetAll_with_view_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -132,8 +119,6 @@ func Test_User_StorageMock_GetAll_with_view_error(t *testing.T) {
 }
 
 func Test_User_StorageMock_GetAll_with_GetMany_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)
 
@@ -163,8 +148,6 @@ func Test_User_StorageMock_GetAll_with_GetMany_error(t *testing.T) {
 }
 
 func Test_Client_StorageMock_FindOneByUsername(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("FindOneByUsername", "some-username").Return("some-id", "some-rev", &ValidUser, nil)
@@ -180,8 +163,6 @@ func Test_Client_StorageMock_FindOneByUsername(t *testing.T) {
 }
 
 func Test_Client_StorageMock_FindOneByUsername_with_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	mock := new(StorageMock)
 
 	mock.On("FindOneByUsername", "some-username").Return("", "", nil, errors.New("some-error"))

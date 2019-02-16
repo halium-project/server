@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util"
 	"github.com/halium-project/server/util/password"
 	"github.com/halium-project/server/util/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_AuthorizationCode_Controller_Create(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -40,8 +37,6 @@ func Test_AuthorizationCode_Controller_Create(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Create_with_validation_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -71,8 +66,6 @@ func Test_AuthorizationCode_Controller_Create_with_validation_error(t *testing.T
 }
 
 func Test_AuthorizationCode_Controller_Create_storage_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -107,8 +100,6 @@ func Test_AuthorizationCode_Controller_Create_storage_error(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Get(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -129,8 +120,6 @@ func Test_AuthorizationCode_Controller_Get(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Get_with_validationError(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -154,8 +143,6 @@ func Test_AuthorizationCode_Controller_Get_with_validationError(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Get_driver_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -183,8 +170,6 @@ func Test_AuthorizationCode_Controller_Get_driver_error(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Delete(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -205,8 +190,6 @@ func Test_AuthorizationCode_Controller_Delete(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Delete_with_validationError(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -229,8 +212,6 @@ func Test_AuthorizationCode_Controller_Delete_with_validationError(t *testing.T)
 }
 
 func Test_AuthorizationCode_Controller_Delete_driver_get_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -257,8 +238,6 @@ func Test_AuthorizationCode_Controller_Delete_driver_get_error(t *testing.T) {
 }
 
 func Test_AuthorizationCode_Controller_Delete_driver_delete_error(t *testing.T) {
-	util.TestIs(t, util.Unit)
-
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
