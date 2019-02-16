@@ -52,7 +52,7 @@ func Test_User_Controller_Create_with_validation_error(t *testing.T) {
 	userID, err := controller.Create(context.Background(), &CreateCmd{
 		Username: ValidUser.Username,
 		Password: "some-password",
-		Role:     "invali-role",
+		Role:     "invalid-role",
 	})
 
 	assert.Empty(t, userID)
