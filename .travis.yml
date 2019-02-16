@@ -1,0 +1,32 @@
+language: go
+
+env:
+  - TZ=Europe/Paris
+
+# This is a weird way of telling Travis to use the fast container-based test
+# runner instead of the slow VM-based runner.
+sudo: false
+
+# Don't email me the results of the test runs.
+notifications:
+  email: false
+
+# Only clone the most recent commit.
+git:
+  depth: 1
+
+after_success:
+  # Upload the code coverage at the end
+  - bash <(curl -s https://codecov.io/bash)
+
+go:
+  - 1.10.x
+  - 1.11.x
+
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+  - dep ensure -vendor-only
+
+script:
+  - go test -v -race -timeout=1m ./...
+  - go test -v -timeout=1m -cover -coverprofile=coverage.out ./...
