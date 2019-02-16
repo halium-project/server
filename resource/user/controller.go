@@ -14,6 +14,9 @@ import (
 	"gitlab.com/Peltoche/yaccc"
 )
 
+const bootstrapUsername = "admin"
+const bootstrapPasswort = "admin1234"
+
 type Controller struct {
 	uuid     uuid.Producer
 	storage  StorageInterface
@@ -49,8 +52,8 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 
 	if requireBootstrap {
 		_, err := controller.Create(ctx, &CreateCmd{
-			Username: "admin",
-			Password: "admin1234",
+			Username: bootstrapUsername,
+			Password: bootstrapPasswort,
 			Role:     Admin,
 		})
 		if err != nil {
