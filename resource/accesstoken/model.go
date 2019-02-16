@@ -48,7 +48,7 @@ type DeleteCmd struct {
 }
 
 var ValidAccessToken = AccessToken{
-	ClientID:     "658fae6d-f9ae-4c5c-8121-bac88ff2ee4b",
+	ClientID:     "my-web-application",
 	AccessToken:  "some-access-token",
 	RefreshToken: "some-refresh-token",
 	ExpiresIn:    3600,

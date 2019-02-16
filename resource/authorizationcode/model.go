@@ -65,7 +65,7 @@ type DeleteCmd struct {
 }
 
 var ValidAuthorizationCode = AuthorizationCode{
-	ClientID:            "658fae6d-f9ae-4c5c-8121-bac88ff2ee4b",
+	ClientID:            "my-web-application",
 	ExpiresIn:           10,
 	Scopes:              []string{"foobar"},
 	RedirectURI:         "http://some-url",

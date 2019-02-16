@@ -117,7 +117,7 @@ func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string
 
 func (t *Controller) Get(ctx context.Context, cmd *GetCmd) (*Client, error) {
 	err := validator.New().
-		CheckString("clientId", cmd.ClientID, is.Required, is.ID).
+		CheckString("clientId", cmd.ClientID, is.Required, is.StringInRange(3, 100)).
 		Run()
 	if err != nil {
 		return nil, err

@@ -48,9 +48,9 @@ func Test_AuthorizationCode_Controller_Create_with_validation_error(t *testing.T
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
 	err := controller.Create(context.Background(), &CreateCmd{
-		ClientID:            "invalid-format-id",
+		ClientID:            ValidAuthorizationCode.ClientID,
 		Code:                "some-authorization-code",
-		ExpiresIn:           ValidAuthorizationCode.ExpiresIn,
+		ExpiresIn:           -1, // should be positif
 		Scopes:              ValidAuthorizationCode.Scopes,
 		RedirectURI:         ValidAuthorizationCode.RedirectURI,
 		State:               ValidAuthorizationCode.State,
@@ -61,7 +61,7 @@ func Test_AuthorizationCode_Controller_Create_with_validation_error(t *testing.T
 	assert.JSONEq(t, `{
 		"kind":"validationError",
 		"errors": {
-			"clientID":"INVALID_FORMAT"
+			"expiresIn":"UNEXPECTED_VALUE"
 		}
 	}`, err.Error())
 

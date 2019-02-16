@@ -234,14 +234,14 @@ func Test_Client_Controller_Get_with_validationError(t *testing.T) {
 	handler := NewController(uuidMock, passwordMock, storageMock)
 
 	res, err := handler.Get(context.Background(), &GetCmd{
-		ClientID: "invalid-id-format",
+		ClientID: "i", // too short
 	})
 
 	assert.Nil(t, res)
 	assert.JSONEq(t, `{
 		"kind": "validationError",
 		"errors": {
-			"clientId": "INVALID_FORMAT"
+			"clientId": "TOO_SHORT"
 		}
 	}`, err.Error())
 

@@ -58,7 +58,7 @@ func NewController(
 
 func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) error {
 	err := validator.New().
-		CheckString("clientID", cmd.ClientID, is.Required, is.ID).
+		CheckString("clientId", cmd.ClientID, is.Required, is.StringInRange(3, 100)).
 		CheckString("code", cmd.Code, is.Required, is.StringInRange(8, 256)).
 		CheckNumber("expiresIn", cmd.ExpiresIn, is.Required, is.NumberPositif).
 		CheckString("redirectURI", cmd.RedirectURI, is.Required, is.StringInRange(3, 512)).

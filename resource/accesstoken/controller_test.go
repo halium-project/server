@@ -45,8 +45,8 @@ func Test_AccessToken_Controller_Create_with_validation_error(t *testing.T) {
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
 	err := controller.Create(context.Background(), &CreateCmd{
-		ClientID:     "invalid-format-id",
-		AccessToken:  ValidAccessToken.AccessToken,
+		ClientID:     ValidAccessToken.ClientID,
+		AccessToken:  "fjdk", // too short
 		RefreshToken: ValidAccessToken.RefreshToken,
 		ExpiresIn:    ValidAccessToken.ExpiresIn,
 		Scopes:       ValidAccessToken.Scopes,
@@ -55,7 +55,7 @@ func Test_AccessToken_Controller_Create_with_validation_error(t *testing.T) {
 	assert.JSONEq(t, `{
 		"kind":"validationError",
 		"errors": {
-			"clientID":"INVALID_FORMAT"
+			"accessToken":"TOO_SHORT"
 		}
 	}`, err.Error())
 
