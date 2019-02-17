@@ -3,15 +3,13 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
-	"os"
 	"time"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/halium-project/go-server-utils/endpoint"
 	"github.com/halium-project/go-server-utils/env"
 	"github.com/halium-project/go-server-utils/errors"
+	"github.com/halium-project/go-server-utils/server"
 	"github.com/halium-project/server/db"
 	"github.com/halium-project/server/front"
 	"github.com/halium-project/server/resource/accesstoken"
@@ -20,7 +18,6 @@ import (
 	"github.com/halium-project/server/resource/user"
 	"github.com/halium-project/server/saga/oauth2"
 	"github.com/halium-project/server/utils/permission"
-	"github.com/rs/cors"
 	"gitlab.com/Peltoche/yaccc"
 )
 
@@ -81,19 +78,5 @@ func main() {
 	// Expose utility endpoints.
 	router.HandleFunc("/ping", endpoint.Pinger).Methods("GET")
 
-	// Link all the middlewares together and create the HTTP server.
-	serv := handlers.LoggingHandler(os.Stdout, router)
-	serv = cors.New(cors.Options{
-		AllowedOrigins:     []string{"*"},
-		AllowedMethods:     []string{"HEAD", "GET", "POST", "PUT", "PATCH", "DELETE"},
-		AllowedHeaders:     []string{"*"},
-		OptionsPassthrough: false,
-	}).Handler(serv)
-
-	// Start the server.
-	log.Printf("listen on: %q", addr)
-	err = http.ListenAndServe(addr, serv)
-	if err != nil {
-		log.Fatal(err)
-	}
+	server.ServeHandler(addr, router)
 }
