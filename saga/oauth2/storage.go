@@ -4,10 +4,10 @@ import (
 	"context"
 	"strings"
 
+	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/server/resource/accesstoken"
 	"github.com/halium-project/server/resource/authorizationcode"
 	"github.com/halium-project/server/resource/client"
-	"github.com/halium-project/server/util/errors"
 	"github.com/openshift/osin"
 )
 

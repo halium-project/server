@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/util/password"
-	"github.com/halium-project/server/util/uuid"
+	"github.com/halium-project/go-server-utils/password"
+	"github.com/halium-project/go-server-utils/uuid"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )

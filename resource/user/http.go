@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/halium-project/server/util/errors"
+	"github.com/halium-project/go-server-utils/errors"
 )
 
 type HTTPHandler struct {

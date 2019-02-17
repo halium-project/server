@@ -3,8 +3,8 @@ package accesstoken
 import (
 	"context"
 
+	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/server/db"
-	"github.com/halium-project/server/util/errors"
 	"gitlab.com/Peltoche/yaccc"
 )
 

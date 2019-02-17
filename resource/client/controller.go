@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/halium-project/go-server-utils/errors"
+	"github.com/halium-project/go-server-utils/password"
+	"github.com/halium-project/go-server-utils/uuid"
+	"github.com/halium-project/go-server-utils/validator"
+	"github.com/halium-project/go-server-utils/validator/is"
 	"github.com/halium-project/server/db"
-	"github.com/halium-project/server/util/errors"
-	"github.com/halium-project/server/util/password"
-	"github.com/halium-project/server/util/uuid"
-	"github.com/halium-project/server/util/validator"
-	"github.com/halium-project/server/util/validator/is"
 	"gitlab.com/Peltoche/yaccc"
 )
 

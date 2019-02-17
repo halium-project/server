@@ -9,6 +9,9 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/halium-project/go-server-utils/endpoint"
+	"github.com/halium-project/go-server-utils/env"
+	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/server/db"
 	"github.com/halium-project/server/front"
 	"github.com/halium-project/server/resource/accesstoken"
@@ -16,10 +19,7 @@ import (
 	"github.com/halium-project/server/resource/client"
 	"github.com/halium-project/server/resource/user"
 	"github.com/halium-project/server/saga/oauth2"
-	"github.com/halium-project/server/util"
-	"github.com/halium-project/server/util/endpoint"
-	"github.com/halium-project/server/util/errors"
-	"github.com/halium-project/server/util/permission"
+	"github.com/halium-project/server/utils/permission"
 	"github.com/rs/cors"
 	"gitlab.com/Peltoche/yaccc"
 )
@@ -34,7 +34,7 @@ const addr = ":42000"
 func main() {
 	ctx := context.Background()
 
-	couchdb, err := yaccc.NewServer(util.MustGetEnv("COUCHDB_URL"), 5, time.Second)
+	couchdb, err := yaccc.NewServer(env.MustGetEnv("COUCHDB_URL"), 5, time.Second)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "failed to connect to couchdb server"))
 	}

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/server/resource/accesstoken"
-	"github.com/halium-project/server/util/errors"
 )
 
 type AccessTokenGetter interface {
