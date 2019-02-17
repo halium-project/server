@@ -4,7 +4,7 @@ require (
 	github.com/google/uuid v1.0.0 // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2
-	github.com/halium-project/go-server-utils v0.0.0-20190217122131-a2b0df672213
+	github.com/halium-project/go-server-utils v0.0.0-20190217153142-f6bd78c026d5
 	github.com/openshift/osin v1.0.1
 	github.com/pborman/uuid v0.0.0-20180906182336-adf5a7427709 // indirect
 	github.com/pkg/errors v0.8.1
