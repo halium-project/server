@@ -1,7 +1,6 @@
 package front
 
 import (
-	"bytes"
 	"html/template"
 	"io"
 	"path/filepath"
@@ -41,13 +40,10 @@ func (t *HTMLRenderer) Render(w io.Writer, templateName string, params interface
 	// If a key is missing return an error instead of filling with the default value.
 	template = template.Option("missingkey=error")
 
-	buf := new(bytes.Buffer)
-	err := template.Execute(buf, params)
+	err := template.Execute(w, params)
 	if err != nil {
 		return errors.Wrapf(err, "failed to execute the template %q", templateName)
 	}
 
-	_, err = buf.WriteTo(w)
-
-	return err
+	return nil
 }
