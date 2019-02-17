@@ -3,11 +3,11 @@ package user
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/halium-project/go-server-utils/errors"
+	"github.com/halium-project/go-server-utils/response"
 )
 
 type HTTPHandler struct {
@@ -35,20 +35,14 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Password string `json:"password"`
 	}
 
-	type response struct {
+	type responseBody struct {
 		UserID string `json:"id"`
 	}
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	var req request
-	err = json.Unmarshal(body, &req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
+		errors.IntoResponse(w, errors.New(errors.InvalidJSON, err.Error()))
 		return
 	}
 
@@ -63,40 +57,27 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(&response{
+	response.Write(w, http.StatusCreated, &responseBody{
 		UserID: userID,
 	})
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 }
 
 func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
-	type getUserResponse User
-
+	userID := mux.Vars(r)["userID"]
 	user, err := t.user.Get(r.Context(), &GetCmd{
-		UserID: mux.Vars(r)["userID"],
+		UserID: userID,
 	})
-
 	if err != nil {
 		errors.IntoResponse(w, err)
 		return
 	}
 
 	if user == nil {
-		w.WriteHeader(http.StatusNotFound)
+		errors.IntoResponse(w, errors.Errorf(errors.NotFound, "user %q not found", userID))
 		return
 	}
 
-	response := getUserResponse(*user)
-
-	err = json.NewEncoder(w).Encode(&response)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	response.Write(w, http.StatusOK, user)
 }
 
 func (t *HTTPHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -105,16 +86,10 @@ func (t *HTTPHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Username string `json:"username"`
 	}
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	var req request
-	err = json.Unmarshal(body, &req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
+		errors.IntoResponse(w, errors.New(errors.InvalidJSON, err.Error()))
 		return
 	}
 
@@ -159,9 +134,5 @@ func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = json.NewEncoder(w).Encode(users)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	response.Write(w, http.StatusOK, users)
 }

@@ -3,11 +3,11 @@ package client
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/halium-project/go-server-utils/errors"
+	"github.com/halium-project/go-server-utils/response"
 )
 
 type HTTPHandler struct {
@@ -36,21 +36,15 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Public        bool     `json:"public"`
 	}
 
-	type response struct {
+	type responseBody struct {
 		ClientID     string `json:"clientID"`
 		ClientSecret string `json:"clientSecret"`
 	}
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	var req request
-	err = json.Unmarshal(body, &req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
+		errors.IntoResponse(w, errors.New(errors.InvalidJSON, err.Error()))
 		return
 	}
 
@@ -67,22 +61,16 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(&response{
+	response.Write(w, http.StatusCreated, &responseBody{
 		ClientID:     id,
 		ClientSecret: secret,
 	})
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 }
 
 func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
-	type response Client
-
+	clientID := mux.Vars(r)["clientID"]
 	client, err := t.client.Get(r.Context(), &GetCmd{
-		ClientID: mux.Vars(r)["clientID"],
+		ClientID: clientID,
 	})
 
 	if err != nil {
@@ -91,17 +79,11 @@ func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if client == nil {
-		w.WriteHeader(http.StatusNotFound)
+		errors.IntoResponse(w, errors.Errorf(errors.NotFound, "client %q not found", clientID))
 		return
 	}
 
-	res := response(*client)
-
-	err = json.NewEncoder(w).Encode(&res)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	response.Write(w, http.StatusOK, &client)
 }
 
 func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -111,9 +93,5 @@ func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = json.NewEncoder(w).Encode(clients)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	response.Write(w, http.StatusOK, clients)
 }
