@@ -142,7 +142,9 @@ func (t *Controller) Info(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *Controller) renderAuthenticationPage(w http.ResponseWriter, HTTPStatus int, param interface{}) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(HTTPStatus)
+
 	err := t.html.Render(w, "auth.html", param)
 	if err != nil {
 		log.Println(err)
