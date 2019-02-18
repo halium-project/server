@@ -47,6 +47,9 @@ func main() {
 	}
 
 	router := mux.NewRouter()
+
+	// Set the permission handler.
+	accessTokenController := accesstoken.InitController(ctx, couchdb)
 	perm := permission.NewController(ctx, accessTokenController)
 
 	// Expose the Client resource.
@@ -59,13 +62,9 @@ func main() {
 	// Expose the User resource.
 	userController := user.InitController(ctx, couchdb)
 	userHTTPHandler := user.NewHTTPHandler(userController)
-	router.HandleFunc("/users", perm.Check("users.write", userHTTPHandler.Create)).Methods("POST")
-	router.HandleFunc("/users", perm.Check("users.read", userHTTPHandler.GetAll)).Methods("Get")
-	router.HandleFunc("/users/{userID}", perm.Check("users.write", userHTTPHandler.Update)).Methods("PUT")
-	router.HandleFunc("/users/{userID}", perm.Check("users.read", userHTTPHandler.Get)).Methods("GET")
+	userHTTPHandler.Register(router, perm)
 
 	// Expose the OAuth2 endpoint.
-	accessTokenController := accesstoken.InitController(ctx, couchdb)
 	authorizationCodeController := authorizationcode.InitController(ctx, couchdb)
 	osinStorageController := oauth2.NewStorageController(clientController, authorizationCodeController, accessTokenController)
 	oauth2SagaController := oauth2.InitController(ctx, couchdb, templateRenderer, userController, osinStorageController)

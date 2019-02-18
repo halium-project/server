@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/go-server-utils/response"
+	"github.com/halium-project/server/utils/permission"
 )
 
 type HTTPHandler struct {
@@ -21,11 +22,17 @@ type ControllerInterface interface {
 	GetAll(ctx context.Context, cmd *GetAllCmd) (map[string]User, error)
 }
 
-func NewHTTPHandler(
-	user ControllerInterface) *HTTPHandler {
+func NewHTTPHandler(user ControllerInterface) *HTTPHandler {
 	return &HTTPHandler{
 		user: user,
 	}
+}
+
+func (t *HTTPHandler) Register(router *mux.Router, perm *permission.Controller) {
+	router.HandleFunc("/users", perm.Check("users.write", t.Create)).Methods("POST")
+	router.HandleFunc("/users", perm.Check("users.read", t.GetAll)).Methods("GET")
+	router.HandleFunc("/users/{userID}", perm.Check("users.write", t.Update)).Methods("PUT")
+	router.HandleFunc("/users/{userID}", perm.Check("users.read", t.Get)).Methods("GET")
 }
 
 func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +70,11 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
+	type responseBody struct {
+		Username string `json:"username"`
+		Role     string `json:"role"`
+	}
+
 	userID := mux.Vars(r)["userID"]
 	user, err := t.user.Get(r.Context(), &GetCmd{
 		UserID: userID,
@@ -77,7 +89,11 @@ func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.Write(w, http.StatusOK, user)
+	// Do not return the password and the salt.
+	response.Write(w, http.StatusOK, &responseBody{
+		Username: user.Username,
+		Role:     user.Role,
+	})
 }
 
 func (t *HTTPHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -104,13 +120,7 @@ func (t *HTTPHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = w.Write([]byte("{}"))
-	if err != nil {
-		errors.IntoResponse(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
+	response.Write(w, http.StatusOK, &struct{}{})
 }
 
 func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
