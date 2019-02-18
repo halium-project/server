@@ -46,24 +46,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Instantiate the controllers
-	clientController := client.InitController(ctx, couchdb)
-	userController := user.InitController(ctx, couchdb)
-	accessTokenController := accesstoken.InitController(ctx, couchdb)
-	authorizationCodeController := authorizationcode.InitController(ctx, couchdb)
-	osinStorageController := oauth2.NewStorageController(clientController, authorizationCodeController, accessTokenController)
-	oauth2SagaController := oauth2.InitController(ctx, couchdb, templateRenderer, userController, osinStorageController)
-
 	router := mux.NewRouter()
 	perm := permission.NewController(ctx, accessTokenController)
 
 	// Expose the Client resource.
+	clientController := client.InitController(ctx, couchdb)
 	clientHTTPHandler := client.NewHTTPHandler(clientController)
 	router.HandleFunc("/clients", perm.Check("clients.write", clientHTTPHandler.Create)).Methods("POST")
 	router.HandleFunc("/clients", perm.Check("clients.read", clientHTTPHandler.GetAll)).Methods("GET")
 	router.HandleFunc("/clients/{clientID}", perm.Check("clients.read", clientHTTPHandler.Get)).Methods("GET")
 
 	// Expose the User resource.
+	userController := user.InitController(ctx, couchdb)
 	userHTTPHandler := user.NewHTTPHandler(userController)
 	router.HandleFunc("/users", perm.Check("users.write", userHTTPHandler.Create)).Methods("POST")
 	router.HandleFunc("/users", perm.Check("users.read", userHTTPHandler.GetAll)).Methods("Get")
@@ -71,6 +65,10 @@ func main() {
 	router.HandleFunc("/users/{userID}", perm.Check("users.read", userHTTPHandler.Get)).Methods("GET")
 
 	// Expose the OAuth2 endpoint.
+	accessTokenController := accesstoken.InitController(ctx, couchdb)
+	authorizationCodeController := authorizationcode.InitController(ctx, couchdb)
+	osinStorageController := oauth2.NewStorageController(clientController, authorizationCodeController, accessTokenController)
+	oauth2SagaController := oauth2.InitController(ctx, couchdb, templateRenderer, userController, osinStorageController)
 	router.HandleFunc("/oauth2/token", oauth2SagaController.Token)
 	router.HandleFunc("/oauth2/auth", oauth2SagaController.Authorize)
 	router.HandleFunc("/oauth2/info", oauth2SagaController.Info)

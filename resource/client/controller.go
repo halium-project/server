@@ -53,7 +53,7 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 	// This is required in order to configure your server.
 	if requireBootstrap {
 		_, _, err := controller.Create(ctx, &CreateCmd{
-			Name:          "Dashboard",
+			Name:          "Controle Panel",
 			RedirectURIs:  []string{"http://localhost:8080"},
 			GrantTypes:    []string{"implicit", "refresh_token"},
 			ResponseTypes: []string{"token", "code"},

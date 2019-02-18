@@ -23,6 +23,8 @@ github.com/halium-project/go-server-utils v0.0.0-20190217151905-d7a5d42a67c4 h1:
 github.com/halium-project/go-server-utils v0.0.0-20190217151905-d7a5d42a67c4/go.mod h1:gIObxukRaXDF5NqMdrjiRcOWNei3vmCsbbxgZMrFoMc=
 github.com/halium-project/go-server-utils v0.0.0-20190217153142-f6bd78c026d5 h1:LC78fdCvfN9VCL9ONgKdxzedFN8Rtb4lpjnB5QSpnTw=
 github.com/halium-project/go-server-utils v0.0.0-20190217153142-f6bd78c026d5/go.mod h1:gIObxukRaXDF5NqMdrjiRcOWNei3vmCsbbxgZMrFoMc=
+github.com/halium-project/go-server-utils v0.0.0-20190217155233-7fd311abb3fa h1:GShvGX/xbZMQJneWUmfdvhvSA0rh43uITZ6rCkzn8YI=
+github.com/halium-project/go-server-utils v0.0.0-20190217155233-7fd311abb3fa/go.mod h1:gIObxukRaXDF5NqMdrjiRcOWNei3vmCsbbxgZMrFoMc=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
