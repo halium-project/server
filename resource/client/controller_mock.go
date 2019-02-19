@@ -33,3 +33,7 @@ func (t *ControllerMock) GetAll(ctx context.Context, cmd *GetAllCmd) (map[string
 
 	return args.Get(0).(map[string]Client), args.Error(1)
 }
+
+func (t *ControllerMock) Delete(ctx context.Context, cmd *DeleteCmd) error {
+	return t.Called(cmd).Error(0)
+}

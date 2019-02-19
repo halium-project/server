@@ -99,3 +99,15 @@ func Test_Client_ControllerMock_GetAll_with_error(t *testing.T) {
 
 	mock.AssertExpectations(t)
 }
+
+func Test_Client_ControllerMock_Delete(t *testing.T) {
+	mock := new(ControllerMock)
+
+	mock.On("Delete", &DeleteCmd{ClientID: "some-id"}).Return(nil).Once()
+
+	err := mock.Delete(context.Background(), &DeleteCmd{ClientID: "some-id"})
+
+	assert.NoError(t, err)
+
+	mock.AssertExpectations(t)
+}

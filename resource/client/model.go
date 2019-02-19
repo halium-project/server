@@ -54,6 +54,10 @@ type GetCmd struct {
 	ClientID string
 }
 
+type DeleteCmd struct {
+	ClientID string
+}
+
 type ValidateCmd struct {
 	ClientID     string
 	ClientSecret string

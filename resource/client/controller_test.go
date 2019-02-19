@@ -248,7 +248,7 @@ func Test_Client_Controller_Get_with_validationError(t *testing.T) {
 	assert.JSONEq(t, `{
 		"kind": "validationError",
 		"errors": {
-			"clientId": "TOO_SHORT"
+			"clientID": "TOO_SHORT"
 		}
 	}`, err.Error())
 
@@ -343,6 +343,67 @@ func Test_Client_Controller_GetAll_with_storage_error(t *testing.T) {
 	assert.JSONEq(t, `{
 		"kind":"internalError",
 		"message":"failed to get all clients",
+		"reason":{
+			"kind":"internalError",
+			"message":"some-error"
+		}
+	}`, err.Error())
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}
+
+func Test_Client_Controller_Delete(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	storageMock.On("Delete", "some-id").Return(nil).Once()
+
+	err := controller.Delete(context.Background(), &DeleteCmd{ClientID: "some-id"})
+
+	assert.NoError(t, err)
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}
+
+func Test_Client_Controller_Delete_with_a_validation_error(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	err := controller.Delete(context.Background(), &DeleteCmd{ClientID: ""})
+
+	assert.JSONEq(t, `{
+		"kind":"validationError",
+		"errors": {
+			"clientID": "MISSING_FIELD"
+		}
+	}`, err.Error())
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}
+
+func Test_Client_Controller_Delete_with_storage_error(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	storageMock.On("Delete", "some-id").Return(errors.New("some-error")).Once()
+
+	err := controller.Delete(context.Background(), &DeleteCmd{ClientID: "some-id"})
+
+	assert.JSONEq(t, `{
+		"kind":"internalError",
+		"message":"failed to delete the client",
 		"reason":{
 			"kind":"internalError",
 			"message":"some-error"

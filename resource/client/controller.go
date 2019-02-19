@@ -25,6 +25,7 @@ type StorageInterface interface {
 	Get(ctx context.Context, id string) (string, *Client, error)
 	GetAll(ctx context.Context) (map[string]Client, error)
 	FindOneByName(ctx context.Context, name string) (string, string, *Client, error)
+	Delete(ctx context.Context, id string) error
 }
 
 func InitController(ctx context.Context, server *yaccc.Server) *Controller {
@@ -135,7 +136,7 @@ func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string
 
 func (t *Controller) Get(ctx context.Context, cmd *GetCmd) (*Client, error) {
 	err := validator.New().
-		CheckString("clientId", cmd.ClientID, is.Required, is.StringInRange(3, 100)).
+		CheckString("clientID", cmd.ClientID, is.Required, is.StringInRange(3, 100)).
 		Run()
 	if err != nil {
 		return nil, err
@@ -159,4 +160,23 @@ func (t *Controller) GetAll(ctx context.Context, cmd *GetAllCmd) (map[string]Cli
 	}
 
 	return res, nil
+}
+
+func (t *Controller) Delete(ctx context.Context, cmd *DeleteCmd) error {
+	err := validator.New().
+		CheckString("clientID", cmd.ClientID, is.Required, is.StringInRange(3, 100)).
+		Run()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second)
+	defer cancel()
+
+	err = t.storage.Delete(ctx, cmd.ClientID)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete the client")
+	}
+
+	return nil
 }
