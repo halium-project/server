@@ -58,6 +58,7 @@ func main() {
 	router.HandleFunc("/clients", perm.Check("clients.write", clientHTTPHandler.Create)).Methods("POST")
 	router.HandleFunc("/clients", perm.Check("clients.read", clientHTTPHandler.GetAll)).Methods("GET")
 	router.HandleFunc("/clients/{clientID}", perm.Check("clients.read", clientHTTPHandler.Get)).Methods("GET")
+	router.HandleFunc("/clients/{clientID}", perm.Check("clients.write", clientHTTPHandler.Delete)).Methods("Delete")
 
 	// Expose the User resource.
 	userController := user.InitController(ctx, couchdb)

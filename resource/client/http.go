@@ -18,6 +18,7 @@ type ControllerInterface interface {
 	Create(ctx context.Context, cmd *CreateCmd) (string, string, error)
 	Get(ctx context.Context, cmd *GetCmd) (*Client, error)
 	GetAll(ctx context.Context, cmd *GetAllCmd) (map[string]Client, error)
+	Delete(ctx context.Context, cmd *DeleteCmd) error
 }
 
 func NewHTTPHandler(client ControllerInterface) *HTTPHandler {
@@ -96,4 +97,19 @@ func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Write(w, http.StatusOK, clients)
+}
+
+func (t *HTTPHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	clientID := mux.Vars(r)["clientID"]
+
+	err := t.client.Delete(r.Context(), &DeleteCmd{
+		ClientID: clientID,
+	})
+	if err != nil {
+		errors.IntoResponse(w, err)
+		return
+	}
+
+	// Do not return the password and the salt.
+	response.Write(w, http.StatusOK, struct{}{})
 }
