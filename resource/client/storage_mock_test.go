@@ -37,6 +37,20 @@ func Test_Client_StorageMock_Get(t *testing.T) {
 	mock.AssertExpectations(t)
 }
 
+//func Test_Client_StorageMock_Delete(t *testing.T) {
+//mock := new(StorageMock)
+
+//mock.On("Delete", "some-id").Return("some-rev", &ValidClient, nil)
+
+//rev, res, err := mock.Get(context.Background(), "some-id")
+
+//assert.NoError(t, err)
+//assert.Equal(t, "some-rev", rev)
+//assert.EqualValues(t, &ValidClient, res)
+
+//mock.AssertExpectations(t)
+//}
+
 func Test_Client_StorageMock_Get_with_error(t *testing.T) {
 	mock := new(StorageMock)
 
