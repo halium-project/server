@@ -24,9 +24,10 @@ func Test_Client_Controller_Create(t *testing.T) {
 	storageMock.On("FindOneByName", ValidClient.Name).Return("", "", nil, nil).Once()
 	uuidMock.On("New").Return(validSecret).Once()
 	passwordMock.On("Hash", validSecret).Return("some-hashed-secret", nil).Once()
-	storageMock.On("Set", ValidID, "", &ValidClient).Return("some-rev", nil).Once()
+	storageMock.On("Set", ValidClient.ID, "", &ValidClient).Return("some-rev", nil).Once()
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          ValidClient.Name,
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,
@@ -36,7 +37,7 @@ func Test_Client_Controller_Create(t *testing.T) {
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, ValidID, id)
+	assert.Equal(t, ValidClient.ID, id)
 	assert.Equal(t, validSecret, secret)
 
 	uuidMock.AssertExpectations(t)
@@ -51,6 +52,7 @@ func Test_Client_Controller_Create_with_validationError(t *testing.T) {
 	handler := NewController(uuidMock, passwordMock, storageMock)
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          "i", // name too short
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,
@@ -82,6 +84,7 @@ func Test_Client_Controller_Create_with_storage_get_error(t *testing.T) {
 	storageMock.On("FindOneByName", ValidClient.Name).Return("", "", nil, fmt.Errorf("some-error")).Once()
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          ValidClient.Name,
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,
@@ -115,6 +118,7 @@ func Test_Client_Controller_Create_with_name_already_taken(t *testing.T) {
 	storageMock.On("FindOneByName", ValidClient.Name).Return("some-id", "some-rev", &ValidClient, nil).Once()
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          ValidClient.Name,
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,
@@ -148,6 +152,7 @@ func Test_Client_Controller_Create_with_password_hash_error(t *testing.T) {
 	passwordMock.On("Hash", validSecret).Return("", fmt.Errorf("some-error")).Once()
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          ValidClient.Name,
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,
@@ -181,9 +186,10 @@ func Test_Client_Controller_Create_with_storage_error(t *testing.T) {
 	storageMock.On("FindOneByName", ValidClient.Name).Return("", "", nil, nil).Once()
 	uuidMock.On("New").Return(validSecret).Once() // one time for the id / one time for the secret
 	passwordMock.On("Hash", validSecret).Return("some-hashed-secret", nil).Once()
-	storageMock.On("Set", ValidID, "", &ValidClient).Return("", fmt.Errorf("some-error")).Once()
+	storageMock.On("Set", ValidClient.ID, "", &ValidClient).Return("", fmt.Errorf("some-error")).Once()
 
 	id, secret, err := handler.Create(context.Background(), &CreateCmd{
+		ID:            ValidClient.ID,
 		Name:          ValidClient.Name,
 		RedirectURIs:  ValidClient.RedirectURIs,
 		GrantTypes:    ValidClient.GrantTypes,

@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/halium-project/go-server-utils/errors"
@@ -82,6 +81,7 @@ func NewController(
 
 func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string, error) {
 	err := validator.New().
+		CheckString("id", cmd.ID, is.Required, is.StringInRange(3, 50)).
 		CheckString("name", cmd.Name, is.Required, is.StringInRange(3, 50)).
 		CheckArray("redirectURIs", cmd.RedirectURIs, is.ArrayInRange(0, 20)).
 		CheckEachString("redirectURIs", cmd.RedirectURIs, is.URL).
@@ -104,8 +104,6 @@ func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string
 		return "", "", errors.NewValidationError().AddError("name", is.AlreadyUsed).IntoError()
 	}
 
-	id := strings.Replace(strings.ToLower(cmd.Name), " ", "-", -1)
-
 	var hash string
 	var secret string
 	if !cmd.Public {
@@ -117,6 +115,7 @@ func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string
 	}
 
 	client := Client{
+		ID:            cmd.ID,
 		Secret:        hash,
 		Name:          cmd.Name,
 		RedirectURIs:  cmd.RedirectURIs,
@@ -126,12 +125,12 @@ func (t *Controller) Create(ctx context.Context, cmd *CreateCmd) (string, string
 		Public:        cmd.Public,
 	}
 
-	_, err = t.storage.Set(ctx, id, "", &client)
+	_, err = t.storage.Set(ctx, cmd.ID, "", &client)
 	if err != nil {
 		return "", "", errors.Wrap(err, "failed to save a client")
 	}
 
-	return id, secret, nil
+	return cmd.ID, secret, nil
 }
 
 func (t *Controller) Get(ctx context.Context, cmd *GetCmd) (*Client, error) {

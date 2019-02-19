@@ -28,6 +28,7 @@ func NewHTTPHandler(client ControllerInterface) *HTTPHandler {
 
 func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 	type request struct {
+		ID            string   `json:"id"`
 		Name          string   `json:"name"`
 		RedirectURIs  []string `json:"redirectURI"`
 		GrantTypes    []string `json:"grantTypes"`
@@ -49,6 +50,7 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, secret, err := t.client.Create(r.Context(), &CreateCmd{
+		ID:            req.ID,
 		Name:          req.Name,
 		RedirectURIs:  req.RedirectURIs,
 		ResponseTypes: req.ResponseTypes,

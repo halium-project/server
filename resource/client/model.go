@@ -6,6 +6,12 @@ package client
 // omitempty is used for all bson casting, with exception to ID, as this should always be provided in queries and
 // updates.
 type Client struct {
+	// Client unique identifier.
+	//
+	// It is human readable and defined by the user, which should be the store
+	// in most of the cases.
+	ID string `json:"id"`
+
 	// Name is the human-readable string name of the client to be presented to the
 	// end-user during authorization.
 	Name string `json:"name"`
@@ -58,6 +64,7 @@ type GetByNameCmd struct {
 }
 
 type CreateCmd struct {
+	ID            string
 	Name          string
 	RedirectURIs  []string
 	GrantTypes    []string
@@ -66,8 +73,8 @@ type CreateCmd struct {
 	Public        bool
 }
 
-var ValidID = "my-web-application"
 var ValidClient = Client{
+	ID:            "my-web-application",
 	Name:          "My Web Application",
 	Secret:        "some-hashed-secret",
 	RedirectURIs:  []string{"http://mydomain/oauth/callback"},

@@ -12,7 +12,8 @@ func Test_Client_ControllerMock_Create(t *testing.T) {
 	mock := new(ControllerMock)
 
 	mock.On("Create", &CreateCmd{
-		Name:          "web",
+		ID:            "some-app",
+		Name:          "Some App",
 		RedirectURIs:  []string{"http://mydomain/oauth/callback"},
 		GrantTypes:    []string{"client_credentials", "authorize_code", "implicit", "refresh_token"},
 		ResponseTypes: []string{"code", "invalid-response-type"},
@@ -21,7 +22,8 @@ func Test_Client_ControllerMock_Create(t *testing.T) {
 	}).Return(fmt.Errorf("some-error")).Once()
 
 	err := mock.Create(context.Background(), &CreateCmd{
-		Name:          "web",
+		ID:            "some-app",
+		Name:          "Some App",
 		RedirectURIs:  []string{"http://mydomain/oauth/callback"},
 		GrantTypes:    []string{"client_credentials", "authorize_code", "implicit", "refresh_token"},
 		ResponseTypes: []string{"code", "invalid-response-type"},
