@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/halium-project/server/db"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
@@ -63,99 +62,31 @@ func Test_Contact_StorageMock_Get_with_error(t *testing.T) {
 }
 
 func Test_Contact_StorageMock_GetAll(t *testing.T) {
-	dbDriver := new(db.DriverMock)
-	service := NewStorage(dbDriver)
+	mock := new(StorageMock)
 
-	dbDriver.On("ExecuteViewQuery", &db.Query{
-		IndexName: "by_name",
-		Limit:     200,
-	}).Return([]db.ViewRow{
-		{ID: "some-id"},
-		{ID: "some-id-2"},
+	mock.On("GetAll").Return(map[string]Contact{
+		"some-id": ValidContact,
 	}, nil).Once()
 
-	dbDriver.On("GetMany", []string{"some-id", "some-id-2"}).Return(map[string]Contact{
-		"some-id":   ValidContact,
-		"some-id-2": ValidContact,
-	}, nil).Once()
-
-	res, err := service.GetAll(context.Background())
+	res, err := mock.GetAll(context.Background())
 
 	assert.NoError(t, err)
 	assert.EqualValues(t, map[string]Contact{
-		"some-id":   ValidContact,
-		"some-id-2": ValidContact,
+		"some-id": ValidContact,
 	}, res)
 
-	dbDriver.AssertExpectations(t)
+	mock.AssertExpectations(t)
 }
 
-func Test_Contact_StorageMock_GetAll_empty(t *testing.T) {
-	dbDriver := new(db.DriverMock)
-	service := NewStorage(dbDriver)
+func Test_Contact_StorageMock_GetAll_with_an_error(t *testing.T) {
+	mock := new(StorageMock)
 
-	dbDriver.On("ExecuteViewQuery", &db.Query{
-		IndexName: "by_name",
-		Limit:     200,
-	}).Return([]db.ViewRow{}, nil).Once()
+	mock.On("GetAll").Return(nil, fmt.Errorf("some-error")).Once()
 
-	res, err := service.GetAll(context.Background())
+	res, err := mock.GetAll(context.Background())
 
-	assert.NoError(t, err)
 	assert.Empty(t, res)
+	assert.EqualError(t, err, "some-error")
 
-	dbDriver.AssertExpectations(t)
-}
-
-func Test_Contact_StorageMock_GetAll_with_view_error(t *testing.T) {
-	dbDriver := new(db.DriverMock)
-	service := NewStorage(dbDriver)
-
-	dbDriver.On("ExecuteViewQuery", &db.Query{
-		IndexName: "by_name",
-		Limit:     200,
-	}).Return(nil, fmt.Errorf("some-error")).Once()
-
-	res, err := service.GetAll(context.Background())
-
-	assert.Nil(t, res)
-	assert.JSONEq(t, `{
-		"kind":"internalError",
-		"message":"failed to query the view",
-		"reason":{
-			"kind":"internalError",
-			"message":"some-error"
-		}
-	}`, err.Error())
-
-	dbDriver.AssertExpectations(t)
-}
-
-func Test_Contact_StorageMock_GetAll_with_GetMany_error(t *testing.T) {
-	dbDriver := new(db.DriverMock)
-	service := NewStorage(dbDriver)
-
-	dbDriver.On("ExecuteViewQuery", &db.Query{
-		IndexName: "by_name",
-		Limit:     200,
-	}).Return([]db.ViewRow{
-		{ID: "some-id"},
-		{ID: "some-id-2"},
-	}, nil).Once()
-
-	dbDriver.On("GetMany", []string{"some-id", "some-id-2"}).Return(nil, fmt.Errorf("some-error")).Once()
-
-	res, err := service.GetAll(context.Background())
-
-	assert.Nil(t, res)
-	assert.JSONEq(t, `{
-		"kind":"internalError",
-		"message":"failed to get the documents",
-		"reason":{
-			"kind":"internalError",
-			"message":"some-error"
-		}
-	}`, err.Error())
-
-	dbDriver.AssertExpectations(t)
+	mock.AssertExpectations(t)
 }
