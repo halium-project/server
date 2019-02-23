@@ -13,12 +13,13 @@ func Test_Contact_ControllerMock_Create(t *testing.T) {
 
 	mock.On("Create", &CreateCmd{
 		Name: ValidContact.Name,
-	}).Return(fmt.Errorf("some-error")).Once()
+	}).Return("", fmt.Errorf("some-error")).Once()
 
-	err := mock.Create(context.Background(), &CreateCmd{
+	id, err := mock.Create(context.Background(), &CreateCmd{
 		Name: ValidContact.Name,
 	})
 
+	assert.Empty(t, id)
 	assert.EqualError(t, err, "some-error")
 
 	mock.AssertExpectations(t)

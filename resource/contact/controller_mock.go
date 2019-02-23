@@ -10,8 +10,10 @@ type ControllerMock struct {
 	mock.Mock
 }
 
-func (t *ControllerMock) Create(ctx context.Context, cmd *CreateCmd) error {
-	return t.Called(cmd).Error(0)
+func (t *ControllerMock) Create(ctx context.Context, cmd *CreateCmd) (string, error) {
+	args := t.Called(cmd)
+
+	return args.String(0), args.Error(1)
 }
 
 func (t *ControllerMock) Get(ctx context.Context, cmd *GetCmd) (*Contact, error) {

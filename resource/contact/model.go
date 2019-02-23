@@ -1,7 +1,7 @@
 package contact
 
 type Contact struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type GetAllCmd struct{}

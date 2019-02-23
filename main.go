@@ -16,6 +16,7 @@ import (
 	"github.com/halium-project/server/resource/accesstoken"
 	"github.com/halium-project/server/resource/authorizationcode"
 	"github.com/halium-project/server/resource/client"
+	"github.com/halium-project/server/resource/contact"
 	"github.com/halium-project/server/resource/user"
 	"github.com/halium-project/server/saga/oauth2"
 	"github.com/halium-project/server/utils/permission"
@@ -62,6 +63,11 @@ func main() {
 	userController := user.InitController(ctx, couchdb)
 	userHTTPHandler := user.NewHTTPHandler(userController)
 	userHTTPHandler.RegisterRoutes(router, perm)
+
+	// Expose the Contact resource.
+	contactController := contact.InitController(ctx, couchdb)
+	contactHTTPHandler := contact.NewHTTPHandler(contactController)
+	contactHTTPHandler.RegisterRoutes(router, perm)
 
 	// Expose the OAuth2 endpoint.
 	authorizationCodeController := authorizationcode.InitController(ctx, couchdb)
