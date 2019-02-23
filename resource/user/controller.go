@@ -27,7 +27,7 @@ type StorageInterface interface {
 	Set(ctx context.Context, userID string, rev string, value *User) (string, error)
 	Get(ctx context.Context, userID string) (string, *User, error)
 	GetAll(ctx context.Context) (map[string]User, error)
-	FindOneByUsername(ctx context.Context, email string) (string, string, *User, error)
+	FindOneByUsername(ctx context.Context, username string) (string, string, *User, error)
 	FindTotalUserCount(ctx context.Context) (int, error)
 }
 
@@ -222,14 +222,14 @@ func (t *Controller) GetTotalUserCount(ctx context.Context) (int, error) {
 	return nbUsers, nil
 }
 
-func (t *Controller) validateUsernameUniqueness(ctx context.Context, email string) error {
-	_, _, user, err := t.storage.FindOneByUsername(ctx, email)
+func (t *Controller) validateUsernameUniqueness(ctx context.Context, username string) error {
+	_, _, user, err := t.storage.FindOneByUsername(ctx, username)
 	if err != nil {
-		return errors.Wrap(err, "failed to check if the user email is already taken")
+		return errors.Wrap(err, "failed to check if the user username is already taken")
 	}
 
 	if user != nil {
-		return errors.NewValidationError().AddError("email", "ALREADY_USED").IntoError()
+		return errors.NewValidationError().AddError("username", "ALREADY_USED").IntoError()
 	}
 
 	return nil

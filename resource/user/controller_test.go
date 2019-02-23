@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const newUsername = "some@new.email"
+const newUsername = "some-username"
 
 func Test_User_Controller_Create(t *testing.T) {
 	uuidMock := new(uuid.ProducerMock)
@@ -254,12 +254,12 @@ func Test_User_Controller_Validate(t *testing.T) {
 	storageMock := new(StorageMock)
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
-	storageMock.On("FindOneByUsername", "some-email@foo.bar").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
+	storageMock.On("FindOneByUsername", "some-username").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
 
 	passwordMock.On("ValidateWithSalt", "some-password", "some-salt", "some-hash").Return(true, nil).Once()
 
 	userID, user, err := controller.Validate(context.Background(), &ValidateCmd{
-		Username: "some-email@foo.bar",
+		Username: "some-username",
 		Password: "some-password",
 	})
 
@@ -278,10 +278,10 @@ func Test_User_Controller_Validate_with_credentials_storage_error(t *testing.T) 
 	storageMock := new(StorageMock)
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
-	storageMock.On("FindOneByUsername", "some-email@foo.bar").Return("", "", nil, fmt.Errorf("some-error")).Once()
+	storageMock.On("FindOneByUsername", "some-username").Return("", "", nil, fmt.Errorf("some-error")).Once()
 
 	userID, user, err := controller.Validate(context.Background(), &ValidateCmd{
-		Username: "some-email@foo.bar",
+		Username: "some-username",
 		Password: "some-password",
 	})
 
@@ -300,16 +300,16 @@ func Test_User_Controller_Validate_with_credentials_storage_error(t *testing.T) 
 	uuidMock.AssertExpectations(t)
 }
 
-func Test_User_Controller_Validate_with_unknown_email(t *testing.T) {
+func Test_User_Controller_Validate_with_unknown_username(t *testing.T) {
 	passwordMock := new(password.HashManagerMock)
 	uuidMock := new(uuid.ProducerMock)
 	storageMock := new(StorageMock)
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
-	storageMock.On("FindOneByUsername", "some-invalid-email").Return("", "", nil, nil).Once()
+	storageMock.On("FindOneByUsername", "some-invalid-username").Return("", "", nil, nil).Once()
 
 	userID, user, err := controller.Validate(context.Background(), &ValidateCmd{
-		Username: "some-invalid-email",
+		Username: "some-invalid-username",
 		Password: "some-password",
 	})
 
@@ -328,12 +328,12 @@ func Test_User_Controller_Validate_with_password_validationError(t *testing.T) {
 	storageMock := new(StorageMock)
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
-	storageMock.On("FindOneByUsername", "some-email@foo.bar").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
+	storageMock.On("FindOneByUsername", "some-username").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
 
 	passwordMock.On("ValidateWithSalt", "some-password", "some-salt", "some-hash").Return(false, fmt.Errorf("some-error")).Once()
 
 	userID, user, err := controller.Validate(context.Background(), &ValidateCmd{
-		Username: "some-email@foo.bar",
+		Username: "some-username",
 		Password: "some-password",
 	})
 
@@ -358,12 +358,12 @@ func Test_User_Controller_Validate_with_invalid_password(t *testing.T) {
 	storageMock := new(StorageMock)
 	controller := NewController(uuidMock, passwordMock, storageMock)
 
-	storageMock.On("FindOneByUsername", "some-email@foo.bar").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
+	storageMock.On("FindOneByUsername", "some-username").Return("some-user-id", "some-rev", &ValidUser, nil).Once()
 
 	passwordMock.On("ValidateWithSalt", "some-invalid-password", "some-salt", "some-hash").Return(false, nil).Once()
 
 	userID, user, err := controller.Validate(context.Background(), &ValidateCmd{
-		Username: "some-email@foo.bar",
+		Username: "some-username",
 		Password: "some-invalid-password",
 	})
 
@@ -419,7 +419,7 @@ func Test_User_Controller_GetTotalUserCount_with_error(t *testing.T) {
 	uuidMock.AssertExpectations(t)
 }
 
-func Test_User_Controller_Create_with_email_checking_error(t *testing.T) {
+func Test_User_Controller_Create_with_username_checking_error(t *testing.T) {
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -436,7 +436,7 @@ func Test_User_Controller_Create_with_email_checking_error(t *testing.T) {
 	assert.Empty(t, userID)
 	assert.JSONEq(t, `{
 		"kind":"internalError",
-		"message":"failed to check if the user email is already taken",
+		"message":"failed to check if the user username is already taken",
 		"reason":{
 			"kind":"internalError",
 			"message":"some-error"
@@ -448,7 +448,7 @@ func Test_User_Controller_Create_with_email_checking_error(t *testing.T) {
 	passwordMock.AssertExpectations(t)
 }
 
-func Test_User_Controller_Create_with_email_already_taken(t *testing.T) {
+func Test_User_Controller_Create_with_username_already_taken(t *testing.T) {
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -466,7 +466,7 @@ func Test_User_Controller_Create_with_email_already_taken(t *testing.T) {
 	assert.JSONEq(t, `{
 		"kind":"validationError",
 		"errors":{
-			"email":"ALREADY_USED"
+			"username":"ALREADY_USED"
 		}
 	}`, err.Error())
 
@@ -527,7 +527,7 @@ func Test_User_Controller_Update_with_storage_error(t *testing.T) {
 	passwordMock.AssertExpectations(t)
 }
 
-func Test_User_Controller_Update_with_email_validation_error(t *testing.T) {
+func Test_User_Controller_Update_with_username_validation_error(t *testing.T) {
 	uuidMock := new(uuid.ProducerMock)
 	passwordMock := new(password.HashManagerMock)
 	storageMock := new(StorageMock)
@@ -544,7 +544,7 @@ func Test_User_Controller_Update_with_email_validation_error(t *testing.T) {
 
 	assert.JSONEq(t, `{
 		"kind":"internalError",
-		"message": "failed to check if the user email is already taken",
+		"message": "failed to check if the user username is already taken",
 		"reason": {
 			"kind": "internalError",
 			"message": "some-error"
