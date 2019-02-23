@@ -58,7 +58,7 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 			RedirectURIs:  []string{"http://localhost:8080"},
 			GrantTypes:    []string{"implicit", "refresh_token"},
 			ResponseTypes: []string{"token", "code"},
-			Scopes:        []string{"users", "clients.read"},
+			Scopes:        []string{"users", "clients"},
 			Public:        true,
 		})
 		if err != nil {
