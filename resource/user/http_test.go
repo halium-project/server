@@ -22,7 +22,7 @@ func Test_User_HTTPHandler_Create_success(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -60,7 +60,7 @@ func Test_User_HTTPHandler_Create_with_an_invalid_json(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -91,7 +91,7 @@ func Test_User_HTTPHandler_Create_with_an_error_from_the_usecase(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -132,7 +132,7 @@ func Test_User_HTTPHandler_Get_success(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -165,7 +165,7 @@ func Test_User_HTTPHandler_Get_with_the_user_not_found(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -198,7 +198,7 @@ func Test_User_HTTPHandler_Get_with_an_error_from_the_usecase(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -231,7 +231,7 @@ func Test_User_HTTPHandler_Update_success(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -268,7 +268,7 @@ func Test_User_HTTPHandler_Update_with_an_invalid_json_request(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -299,7 +299,7 @@ func Test_User_HTTPHandler_Update_with_an_error_from_the_usecase(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -339,7 +339,7 @@ func Test_User_HTTPHandler_GetAll_success(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
@@ -374,7 +374,7 @@ func Test_User_HTTPHandler_GetAll_with_an_error_from_the_usecase(t *testing.T) {
 	router := mux.NewRouter()
 	controllerMock := new(ControllerMock)
 	handler := NewHTTPHandler(controllerMock)
-	handler.Register(router, perm)
+	handler.RegisterRoutes(router, perm)
 
 	// Token introspection
 	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()

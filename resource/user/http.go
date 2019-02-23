@@ -28,7 +28,7 @@ func NewHTTPHandler(user ControllerInterface) *HTTPHandler {
 	}
 }
 
-func (t *HTTPHandler) Register(router *mux.Router, perm *permission.Controller) {
+func (t *HTTPHandler) RegisterRoutes(router *mux.Router, perm *permission.Controller) {
 	router.HandleFunc("/users", perm.Check("users.write", t.Create)).Methods("POST")
 	router.HandleFunc("/users", perm.Check("users.read", t.GetAll)).Methods("GET")
 	router.HandleFunc("/users/{userID}", perm.Check("users.write", t.Update)).Methods("PUT")

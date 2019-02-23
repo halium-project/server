@@ -1,4 +1,4 @@
-package front
+package templates
 
 import (
 	"html/template"
@@ -13,25 +13,25 @@ var (
 	ErrTemplateNotFound = errors.New("template not found")
 )
 
-type HTMLRenderer struct {
+type Renderer struct {
 	templates *template.Template
 }
 
-func NewHTMLRenderer() (*HTMLRenderer, error) {
+func NewRenderer() (*Renderer, error) {
 	templatesPaths, err := filepath.Glob("./front/templates/*")
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to find the HTML template folder")
+		return nil, errors.Wrap(err, "failed to find the  template folder")
 	}
 
 	templates, err := template.New("base").ParseFiles(templatesPaths...)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse one of the HTML template")
+		return nil, errors.Wrap(err, "failed to parse one of the  template")
 	}
 
-	return &HTMLRenderer{templates: templates}, nil
+	return &Renderer{templates: templates}, nil
 }
 
-func (t *HTMLRenderer) Render(w io.Writer, templateName string, params interface{}) error {
+func (t *Renderer) Render(w io.Writer, templateName string, params interface{}) error {
 	template := t.templates.Lookup(templateName)
 	if template == nil {
 		return ErrTemplateNotFound

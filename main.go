@@ -12,6 +12,7 @@ import (
 	"github.com/halium-project/go-server-utils/server"
 	"github.com/halium-project/server/db"
 	"github.com/halium-project/server/front"
+	"github.com/halium-project/server/front/templates"
 	"github.com/halium-project/server/resource/accesstoken"
 	"github.com/halium-project/server/resource/authorizationcode"
 	"github.com/halium-project/server/resource/client"
@@ -41,7 +42,7 @@ func main() {
 		log.Fatal(errors.Wrap(err, "failed to init the couchdb server"))
 	}
 
-	templateRenderer, err := front.NewHTMLRenderer()
+	templateRenderer, err := templates.NewRenderer()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,7 +64,7 @@ func main() {
 	// Expose the User resource.
 	userController := user.InitController(ctx, couchdb)
 	userHTTPHandler := user.NewHTTPHandler(userController)
-	userHTTPHandler.Register(router, perm)
+	userHTTPHandler.RegisterRoutes(router, perm)
 
 	// Expose the OAuth2 endpoint.
 	authorizationCodeController := authorizationcode.InitController(ctx, couchdb)
@@ -72,6 +73,10 @@ func main() {
 	router.HandleFunc("/oauth2/token", oauth2SagaController.Token)
 	router.HandleFunc("/oauth2/auth", oauth2SagaController.Authorize)
 	router.HandleFunc("/oauth2/info", oauth2SagaController.Info)
+
+	// Expose the Web Pages
+	pageServer := front.NewPageServer(templateRenderer, userController)
+	pageServer.RegisterRoutes(router)
 
 	// Expose utility endpoints.
 	router.HandleFunc("/ping", endpoint.Pinger).Methods("GET")
