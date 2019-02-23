@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/halium-project/go-server-utils/errors"
 	"github.com/halium-project/go-server-utils/response"
+	"github.com/halium-project/server/utils/permission"
 )
 
 type HTTPHandler struct {
@@ -25,6 +26,13 @@ func NewHTTPHandler(client ControllerInterface) *HTTPHandler {
 	return &HTTPHandler{
 		client: client,
 	}
+}
+
+func (t *HTTPHandler) RegisterRoutes(router *mux.Router, perm *permission.Controller) {
+	router.HandleFunc("/clients", perm.Check("clients.write", t.Create)).Methods("POST")
+	router.HandleFunc("/clients", perm.Check("clients.read", t.GetAll)).Methods("GET")
+	router.HandleFunc("/clients/{clientID}", perm.Check("clients.read", t.Get)).Methods("GET")
+	router.HandleFunc("/clients/{clientID}", perm.Check("clients.write", t.Delete)).Methods("Delete")
 }
 
 func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
