@@ -39,3 +39,13 @@ func (t *StorageMock) GetAll(ctx context.Context) (map[string]Contact, error) {
 
 	return args.Get(0).(map[string]Contact), nil
 }
+
+func (t *StorageMock) FindOneByName(ctx context.Context, name string) (string, string, *Contact, error) {
+	args := t.Called(name)
+
+	if args.Get(2) == nil {
+		return "", "", nil, args.Error(3)
+	}
+
+	return args.String(0), args.String(1), args.Get(2).(*Contact), args.Error(3)
+}

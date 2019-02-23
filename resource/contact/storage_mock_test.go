@@ -90,3 +90,33 @@ func Test_Contact_StorageMock_GetAll_with_an_error(t *testing.T) {
 
 	mock.AssertExpectations(t)
 }
+
+func Test_Contact_StorageMock_FindOneByName(t *testing.T) {
+	mock := new(StorageMock)
+
+	mock.On("FindOneByName", "some-name").Return("some-id", "some-rev", &ValidContact, nil)
+
+	id, rev, res, err := mock.FindOneByName(context.Background(), "some-name")
+
+	assert.NoError(t, err)
+	assert.Equal(t, "some-id", id)
+	assert.Equal(t, "some-rev", rev)
+	assert.EqualValues(t, &ValidContact, res)
+
+	mock.AssertExpectations(t)
+}
+
+func Test_Contact_StorageMock_FindOneByName_with_error(t *testing.T) {
+	mock := new(StorageMock)
+
+	mock.On("FindOneByName", "some-name").Return("", "", nil, errors.New("some-error"))
+
+	id, rev, res, err := mock.FindOneByName(context.Background(), "some-name")
+
+	assert.Empty(t, rev)
+	assert.Empty(t, id)
+	assert.Nil(t, res)
+	assert.EqualError(t, err, "some-error")
+
+	mock.AssertExpectations(t)
+}

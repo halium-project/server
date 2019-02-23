@@ -261,3 +261,105 @@ func Test_Contact_Storage_GetAll_with_GetMany_error(t *testing.T) {
 
 	dbDriver.AssertExpectations(t)
 }
+
+func Test_Contact_Storage_FindOneByName(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	user := NewStorage(dbDriver)
+
+	dbDriver.On("ExecuteViewQuery", &db.Query{
+		IndexName: "by_name",
+		Limit:     1,
+		Equals:    []interface{}{"some-username"},
+	}).Return([]db.ViewRow{
+		{ID: "some-id"},
+	}, nil).Once()
+
+	dbDriver.On("Get", "some-id").Return("some-rev", &ValidContact, nil).Once()
+
+	id, rev, res, err := user.FindOneByName(context.Background(), "some-username")
+
+	assert.Equal(t, "some-id", id)
+	assert.Equal(t, "some-rev", rev)
+	assert.NoError(t, err)
+	assert.EqualValues(t, &ValidContact, res)
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_Contact_Storage_FindOneByName_with_no_user_found(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	user := NewStorage(dbDriver)
+
+	dbDriver.On("ExecuteViewQuery", &db.Query{
+		IndexName: "by_name",
+		Limit:     1,
+		Equals:    []interface{}{"some-username"},
+	}).Return(nil, nil).Once()
+
+	id, rev, res, err := user.FindOneByName(context.Background(), "some-username")
+
+	assert.Empty(t, id)
+	assert.Empty(t, rev)
+	assert.NoError(t, err)
+	assert.Nil(t, res)
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_Contact_Storage_FindOneByName_with_query_view_error(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	user := NewStorage(dbDriver)
+
+	dbDriver.On("ExecuteViewQuery", &db.Query{
+		IndexName: "by_name",
+		Limit:     1,
+		Equals:    []interface{}{"some-username"},
+	}).Return(nil, fmt.Errorf("some-error")).Once()
+
+	id, rev, res, err := user.FindOneByName(context.Background(), "some-username")
+
+	assert.Empty(t, id)
+	assert.Empty(t, rev)
+	assert.Nil(t, res)
+	assert.JSONEq(t, `{
+		"kind":"internalError",
+		"message":"failed to query the view",
+		"reason":{
+			"kind":"internalError",
+			"message":"some-error"
+		}
+	}`, err.Error())
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_Contact_Storage_FindOneByName_with_get_error(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	user := NewStorage(dbDriver)
+
+	dbDriver.On("ExecuteViewQuery", &db.Query{
+		IndexName: "by_name",
+		Limit:     1,
+		Equals:    []interface{}{"some-username"},
+	}).Return([]db.ViewRow{
+		{ID: "some-id"},
+	}, nil).Once()
+
+	dbDriver.On("Get", "some-id").Return("", nil, fmt.Errorf("some-error")).Once()
+
+	id, rev, res, err := user.FindOneByName(context.Background(), "some-username")
+
+	assert.Empty(t, id)
+	assert.Empty(t, rev)
+	assert.Nil(t, res)
+	assert.JSONEq(t, `{
+		"kind":"internalError",
+		"message":"failed to get the document",
+		"reason":{
+			"kind":"internalError",
+			"message":"some-error"
+		}
+	}`, err.Error())
+
+	dbDriver.AssertExpectations(t)
+}

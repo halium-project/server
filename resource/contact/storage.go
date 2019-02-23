@@ -121,3 +121,26 @@ func (t *Storage) GetAll(ctx context.Context) (map[string]Contact, error) {
 
 	return res, nil
 }
+
+func (t *Storage) FindOneByName(ctx context.Context, name string) (string, string, *Contact, error) {
+	res, err := t.driver.ExecuteViewQuery(ctx, &db.Query{
+		IndexName: "by_name",
+		Limit:     1,
+		Equals:    []interface{}{name},
+	})
+	if err != nil {
+		return "", "", nil, errors.Wrap(err, "failed to query the view")
+	}
+
+	if len(res) == 0 {
+		return "", "", nil, nil
+	}
+
+	var contact Contact
+	rev, err := t.driver.Get(ctx, res[0].ID, &contact)
+	if err != nil {
+		return "", "", nil, errors.Wrap(err, "failed to get the document")
+	}
+
+	return res[0].ID, rev, &contact, nil
+}
