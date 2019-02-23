@@ -26,6 +26,10 @@ func (t *ControllerMock) Get(ctx context.Context, cmd *GetCmd) (*User, error) {
 	return args.Get(0).(*User), args.Error(1)
 }
 
+func (t *ControllerMock) Delete(ctx context.Context, cmd *DeleteCmd) error {
+	return t.Called(cmd).Error(0)
+}
+
 func (t *ControllerMock) GetAll(ctx context.Context, cmd *GetAllCmd) (map[string]User, error) {
 	args := t.Called(cmd)
 

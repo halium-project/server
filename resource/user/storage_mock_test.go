@@ -49,6 +49,18 @@ func Test_User_StorageMock_Get_with_error(t *testing.T) {
 	mock.AssertExpectations(t)
 }
 
+func Test_Client_StorageMock_Delete(t *testing.T) {
+	mock := new(StorageMock)
+
+	mock.On("Delete", "some-id").Return(nil)
+
+	err := mock.Delete(context.Background(), "some-id")
+
+	assert.NoError(t, err)
+
+	mock.AssertExpectations(t)
+}
+
 func Test_User_StorageMock_GetAll(t *testing.T) {
 	dbDriver := new(db.DriverMock)
 	service := NewStorage(dbDriver)

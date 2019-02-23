@@ -29,6 +29,7 @@ type StorageInterface interface {
 	GetAll(ctx context.Context) (map[string]User, error)
 	FindOneByUsername(ctx context.Context, username string) (string, string, *User, error)
 	FindTotalUserCount(ctx context.Context) (int, error)
+	Delete(ctx context.Context, id string) error
 }
 
 func InitController(ctx context.Context, server *yaccc.Server) *Controller {
@@ -230,6 +231,25 @@ func (t *Controller) validateUsernameUniqueness(ctx context.Context, username st
 
 	if user != nil {
 		return errors.NewValidationError().AddError("username", "ALREADY_USED").IntoError()
+	}
+
+	return nil
+}
+
+func (t *Controller) Delete(ctx context.Context, cmd *DeleteCmd) error {
+	err := validator.New().
+		CheckString("userID", cmd.UserID, is.Required, is.ID).
+		Run()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second)
+	defer cancel()
+
+	err = t.storage.Delete(ctx, cmd.UserID)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete the user")
 	}
 
 	return nil

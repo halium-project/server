@@ -180,3 +180,15 @@ func Test_User_ControllerMock_Update(t *testing.T) {
 
 	mock.AssertExpectations(t)
 }
+
+func Test_Client_ControllerMock_Delete(t *testing.T) {
+	mock := new(ControllerMock)
+
+	mock.On("Delete", &DeleteCmd{UserID: "some-id"}).Return(nil).Once()
+
+	err := mock.Delete(context.Background(), &DeleteCmd{UserID: "some-id"})
+
+	assert.NoError(t, err)
+
+	mock.AssertExpectations(t)
+}

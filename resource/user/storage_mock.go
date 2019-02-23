@@ -26,6 +26,10 @@ func (t *StorageMock) Get(_ context.Context, userID string) (string, *User, erro
 	return args.String(0), args.Get(1).(*User), args.Error(2)
 }
 
+func (t *StorageMock) Delete(ctx context.Context, id string) error {
+	return t.Called(id).Error(0)
+}
+
 func (t *StorageMock) GetAll(ctx context.Context) (map[string]User, error) {
 	args := t.Called()
 

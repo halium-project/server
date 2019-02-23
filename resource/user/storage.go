@@ -69,6 +69,26 @@ func (t *Storage) Get(ctx context.Context, id string) (string, *User, error) {
 	return rev, &user, nil
 }
 
+func (t *Storage) Delete(ctx context.Context, id string) error {
+	var user User
+
+	rev, err := t.driver.Get(ctx, id, &user)
+	if err != nil {
+		return errors.Wrap(err, "failed to get the document from the storage")
+	}
+
+	if rev == "" {
+		return nil
+	}
+
+	err = t.driver.Delete(ctx, id, rev)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete the document from the storage")
+	}
+
+	return nil
+}
+
 func (t *Storage) GetAll(ctx context.Context) (map[string]User, error) {
 	viewResult, err := t.driver.ExecuteViewQuery(ctx, &db.Query{
 		IndexName: "by_username",

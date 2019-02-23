@@ -97,6 +97,74 @@ func Test_User_Storage_Get_with_driver_error(t *testing.T) {
 	dbDriver.AssertExpectations(t)
 }
 
+func Test_User_Storage_Delete(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	storage := NewStorage(dbDriver)
+
+	dbDriver.On("Get", "some-id").Return("some-rev", &ValidUser, nil).Once()
+	dbDriver.On("Delete", "some-id", "some-rev").Return(nil).Once()
+
+	err := storage.Delete(context.Background(), "some-id")
+
+	assert.NoError(t, err)
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_User_Storage_Delete_with_a_get_error(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	storage := NewStorage(dbDriver)
+
+	dbDriver.On("Get", "some-id").Return("", nil, errors.New("some-error")).Once()
+
+	err := storage.Delete(context.Background(), "some-id")
+
+	assert.JSONEq(t, `{
+		"kind": "internalError",
+		"message": "failed to get the document from the storage",
+		"reason": {
+			"kind": "internalError",
+			"message": "some-error"
+		}
+	}`, err.Error())
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_User_Storage_Delete_with_no_document_found(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	storage := NewStorage(dbDriver)
+
+	dbDriver.On("Get", "some-id").Return("", nil, nil).Once()
+
+	err := storage.Delete(context.Background(), "some-id")
+
+	assert.NoError(t, err)
+
+	dbDriver.AssertExpectations(t)
+}
+
+func Test_User_Storage_Delete_with_a_delete_error(t *testing.T) {
+	dbDriver := new(db.DriverMock)
+	storage := NewStorage(dbDriver)
+
+	dbDriver.On("Get", "some-id").Return("some-rev", &ValidUser, nil).Once()
+	dbDriver.On("Delete", "some-id", "some-rev").Return(errors.New("some-error")).Once()
+
+	err := storage.Delete(context.Background(), "some-id")
+
+	assert.JSONEq(t, `{
+		"kind": "internalError",
+		"message": "failed to delete the document from the storage",
+		"reason": {
+			"kind": "internalError",
+			"message": "some-error"
+		}
+	}`, err.Error())
+
+	dbDriver.AssertExpectations(t)
+}
+
 func Test_User_Storage_FindOneByUsername(t *testing.T) {
 	dbDriver := new(db.DriverMock)
 	user := NewStorage(dbDriver)

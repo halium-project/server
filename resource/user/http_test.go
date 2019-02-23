@@ -400,3 +400,66 @@ func Test_User_HTTPHandler_GetAll_with_an_error_from_the_usecase(t *testing.T) {
 	controllerMock.AssertExpectations(t)
 	accessTokenControllerMock.AssertExpectations(t)
 }
+
+func Test_User_HTTPHandler_Delete_success(t *testing.T) {
+	accessTokenControllerMock := new(accesstoken.ControllerMock)
+	perm := permission.NewController(context.Background(), accessTokenControllerMock)
+	router := mux.NewRouter()
+	controllerMock := new(ControllerMock)
+	handler := NewHTTPHandler(controllerMock)
+	handler.RegisterRoutes(router, perm)
+
+	// Token introspection
+	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
+
+	controllerMock.On("Delete", &DeleteCmd{UserID: "some-user-id"}).Return(nil).Once()
+
+	r := httptest.NewRequest("DELETE", "http://example.com/users/some-user-id", nil)
+	r.Header.Add("Authorization", "Bearer foobar")
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, r)
+
+	res := w.Result()
+	body, err := ioutil.ReadAll(res.Body)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+	assert.JSONEq(t, `{}`, string(body))
+
+	controllerMock.AssertExpectations(t)
+	accessTokenControllerMock.AssertExpectations(t)
+}
+
+func Test_User_HTTPHandler_Delete_with_an_error_from_the_usecase(t *testing.T) {
+	accessTokenControllerMock := new(accesstoken.ControllerMock)
+	perm := permission.NewController(context.Background(), accessTokenControllerMock)
+	router := mux.NewRouter()
+	controllerMock := new(ControllerMock)
+	handler := NewHTTPHandler(controllerMock)
+	handler.RegisterRoutes(router, perm)
+
+	// Token introspection
+	accessTokenControllerMock.On("Get", &accesstoken.GetCmd{AccessToken: "foobar"}).Return(&accesstoken.ValidAccessToken, nil).Once()
+
+	controllerMock.On("Delete", &DeleteCmd{UserID: "some-user-id"}).Return(errors.New(errors.BadRequest, "some-error")).Once()
+
+	r := httptest.NewRequest("DELETE", "http://example.com/users/some-user-id", nil)
+	r.Header.Add("Authorization", "Bearer foobar")
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, r)
+
+	res := w.Result()
+	body, err := ioutil.ReadAll(res.Body)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
+	assert.JSONEq(t, `{
+		"kind": "badRequest",
+		"message": "some-error"
+	}`, string(body))
+
+	controllerMock.AssertExpectations(t)
+	accessTokenControllerMock.AssertExpectations(t)
+}

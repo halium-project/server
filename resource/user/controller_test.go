@@ -637,3 +637,64 @@ func Test_User_Controller_Update_with_set_error(t *testing.T) {
 	uuidMock.AssertExpectations(t)
 	passwordMock.AssertExpectations(t)
 }
+
+func Test_User_Controller_Delete(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	storageMock.On("Delete", ValidUserID).Return(nil).Once()
+
+	err := controller.Delete(context.Background(), &DeleteCmd{UserID: ValidUserID})
+
+	assert.NoError(t, err)
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}
+
+func Test_User_Controller_Delete_with_a_validation_error(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	err := controller.Delete(context.Background(), &DeleteCmd{UserID: ""})
+
+	assert.JSONEq(t, `{
+		"kind":"validationError",
+		"errors": {
+			"userID": "MISSING_FIELD"
+		}
+	}`, err.Error())
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}
+
+func Test_User_Controller_Delete_with_storage_error(t *testing.T) {
+	uuidMock := new(uuid.ProducerMock)
+	passwordMock := new(password.HashManagerMock)
+	storageMock := new(StorageMock)
+	controller := NewController(uuidMock, passwordMock, storageMock)
+
+	storageMock.On("Delete", ValidUserID).Return(errors.New("some-error")).Once()
+
+	err := controller.Delete(context.Background(), &DeleteCmd{UserID: ValidUserID})
+
+	assert.JSONEq(t, `{
+		"kind":"internalError",
+		"message":"failed to delete the user",
+		"reason":{
+			"kind":"internalError",
+			"message":"some-error"
+		}
+	}`, err.Error())
+
+	uuidMock.AssertExpectations(t)
+	storageMock.AssertExpectations(t)
+	passwordMock.AssertExpectations(t)
+}

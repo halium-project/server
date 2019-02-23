@@ -20,6 +20,7 @@ type ControllerInterface interface {
 	Create(ctx context.Context, cmd *CreateCmd) (string, error)
 	Update(ctx context.Context, cmd *UpdateCmd) error
 	GetAll(ctx context.Context, cmd *GetAllCmd) (map[string]User, error)
+	Delete(ctx context.Context, cmd *DeleteCmd) error
 }
 
 func NewHTTPHandler(user ControllerInterface) *HTTPHandler {
@@ -32,6 +33,7 @@ func (t *HTTPHandler) RegisterRoutes(router *mux.Router, perm *permission.Contro
 	router.HandleFunc("/users", perm.Check("users.write", t.Create)).Methods("POST")
 	router.HandleFunc("/users", perm.Check("users.read", t.GetAll)).Methods("GET")
 	router.HandleFunc("/users/{userID}", perm.Check("users.write", t.Update)).Methods("PUT")
+	router.HandleFunc("/users/{userID}", perm.Check("users.write", t.Delete)).Methods("DELETE")
 	router.HandleFunc("/users/{userID}", perm.Check("users.read", t.Get)).Methods("GET")
 }
 
@@ -145,4 +147,19 @@ func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Write(w, http.StatusOK, users)
+}
+
+func (t *HTTPHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	userID := mux.Vars(r)["userID"]
+
+	err := t.user.Delete(r.Context(), &DeleteCmd{
+		UserID: userID,
+	})
+	if err != nil {
+		errors.IntoResponse(w, err)
+		return
+	}
+
+	// Do not return the password and the salt.
+	response.Write(w, http.StatusOK, struct{}{})
 }

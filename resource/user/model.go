@@ -28,6 +28,10 @@ type GetCmd struct {
 	UserID string
 }
 
+type DeleteCmd struct {
+	UserID string
+}
+
 type GetAllCmd struct{}
 
 type ValidateCmd struct {
@@ -35,6 +39,7 @@ type ValidateCmd struct {
 	Password string
 }
 
+var ValidUserID = "ae6ac8d6-0bcf-4671-a21a-49eab3167cbb"
 var ValidUser = User{
 	Username: "some username",
 	Role:     Admin,
