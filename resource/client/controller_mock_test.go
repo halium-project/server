@@ -19,9 +19,9 @@ func Test_Client_ControllerMock_Create(t *testing.T) {
 		ResponseTypes: []string{"code", "invalid-response-type"},
 		Scopes:        []string{"client", "admin"},
 		Public:        true,
-	}).Return(fmt.Errorf("some-error")).Once()
+	}).Return("", "", fmt.Errorf("some-error")).Once()
 
-	err := mock.Create(context.Background(), &CreateCmd{
+	id, secret, err := mock.Create(context.Background(), &CreateCmd{
 		ID:            "some-app",
 		Name:          "Some App",
 		RedirectURIs:  []string{"http://mydomain/oauth/callback"},
@@ -31,6 +31,8 @@ func Test_Client_ControllerMock_Create(t *testing.T) {
 		Public:        true,
 	})
 
+	assert.Empty(t, id)
+	assert.Empty(t, secret)
 	assert.EqualError(t, err, "some-error")
 
 	mock.AssertExpectations(t)

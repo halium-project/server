@@ -94,6 +94,9 @@ func (t *HTTPHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Do not return the secret
+	client.Secret = ""
+
 	response.Write(w, http.StatusOK, &client)
 }
 
@@ -102,6 +105,11 @@ func (t *HTTPHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		errors.IntoResponse(w, err)
 		return
+	}
+
+	for _, client := range clients {
+		// Do not return the secret
+		client.Secret = ""
 	}
 
 	response.Write(w, http.StatusOK, clients)
