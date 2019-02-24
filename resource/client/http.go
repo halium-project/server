@@ -39,7 +39,7 @@ func (t *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		ID            string   `json:"id"`
 		Name          string   `json:"name"`
-		RedirectURIs  []string `json:"redirectURI"`
+		RedirectURIs  []string `json:"redirectURIs"`
 		GrantTypes    []string `json:"grantTypes"`
 		ResponseTypes []string `json:"responseTypes"`
 		Scopes        []string `json:"scopes"`
