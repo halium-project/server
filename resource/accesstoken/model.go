@@ -52,6 +52,6 @@ var ValidAccessToken = AccessToken{
 	AccessToken:  "some-access-token",
 	RefreshToken: "some-refresh-token",
 	ExpiresIn:    3600,
-	Scopes:       []string{"users", "foobar", "client", "contacts"},
+	Scopes:       []string{"users", "foobar", "client", "contacts", "todos"},
 	CreatedAt:    time.Now().Round(time.Millisecond),
 }
