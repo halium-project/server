@@ -55,7 +55,7 @@ func InitController(ctx context.Context, server *yaccc.Server) *Controller {
 		_, _, err := controller.Create(ctx, &CreateCmd{
 			ID:            "controle-panel",
 			Name:          "Controle Panel",
-			RedirectURIs:  []string{"http://localhost:8080"},
+			RedirectURIs:  []string{"http://localhost:8081"},
 			GrantTypes:    []string{"implicit", "refresh_token"},
 			ResponseTypes: []string{"token", "code"},
 			Scopes:        []string{"users", "clients"},
