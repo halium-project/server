@@ -32,6 +32,7 @@ func NewPageServer(renderer HTMLRenderer, user UserCreator) *PageServer {
 
 func (t *PageServer) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/register", t.Register)
+	router.HandleFunc("/print-code", t.PrintCode)
 }
 
 func (t *PageServer) Register(w http.ResponseWriter, r *http.Request) {
@@ -79,4 +80,9 @@ func (t *PageServer) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "http://localhost:8080/", http.StatusSeeOther)
+}
+
+func (t *PageServer) PrintCode(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t.renderer.Render(w, "print_code.html", r.URL.Query().Get("code"))
 }
