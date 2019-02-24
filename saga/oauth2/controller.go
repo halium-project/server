@@ -37,7 +37,7 @@ func InitController(
 	osinConfig := osin.NewServerConfig()
 	osinConfig.AllowedAuthorizeTypes = []osin.AuthorizeRequestType{osin.CODE, osin.TOKEN}
 	osinConfig.AllowedAccessTypes = osin.AllowedAccessType{osin.AUTHORIZATION_CODE, osin.REFRESH_TOKEN, osin.CLIENT_CREDENTIALS, osin.IMPLICIT}
-	osinConfig.AccessExpiration = 3
+	osinConfig.AccessExpiration = 3600
 	osinConfig.ErrorStatusCode = http.StatusBadRequest
 
 	osinServer := osin.NewServer(osinConfig, storage)
