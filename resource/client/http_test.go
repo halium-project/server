@@ -39,7 +39,7 @@ func Test_Client_HTTPHandler_Create_success(t *testing.T) {
 	r := httptest.NewRequest("POST", "http://example.com/clients", strings.NewReader(`{
 		"id": "my-app",
 		"name": "My App",
-		"redirectURI": ["url-1", "url-2"],
+		"redirectURIs": ["url-1", "url-2"],
 		"grantTypes": ["password"],
 		"responseTypes": ["token"],
 		"scopes": ["scope-1", "scope-2"]
@@ -117,7 +117,7 @@ func Test_Client_HTTPHandler_Create_with_an_error_from_the_usecase(t *testing.T)
 	r := httptest.NewRequest("POST", "http://example.com/clients", strings.NewReader(`{
 		"id": "my-app",
 		"name": "My App",
-		"redirectURI": ["url-1", "url-2"],
+		"redirectURIs": ["url-1", "url-2"],
 		"grantTypes": ["password"],
 		"responseTypes": ["token"],
 		"scopes": ["scope-1", "scope-2"]
